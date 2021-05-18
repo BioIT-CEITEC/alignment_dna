@@ -1,0 +1,30 @@
+{
+  "workflow_description": {
+    "name":"alignment_DNA",
+    "version": 1.0,
+    "label":"Alignment DNA",
+    "type":"alignment_DNA",
+    "inputs":"",
+    "outputs":[
+      "",
+      ""
+    ]
+  },
+  "general_params": [
+    "library_name",
+    "sample_name",
+    "run_forward_read_length",
+    "run_reverse_read_length",
+    "lib_forward_read_length",
+    "lib_reverse_read_length"
+  ],
+  "gui_params" : {
+    "detailed": {
+      "additional_fastqc_options": {
+        "label": "Additional options to fastqc call",
+        "type": "string",
+        "default": ""
+      }
+    }
+  }
+}
