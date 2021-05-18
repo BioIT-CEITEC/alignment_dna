@@ -28,20 +28,20 @@ rule mark_duplicates:
 
 rule umi_concensus:
     input:
-        bam = os.path.join(DIR,"mapped/{sample}.not_markDups.bam"),
-        bai = os.path.join(DIR,"mapped/{sample}.not_markDups.bam.bai"),
-        bwa_ref = os.path.join(REF_DIR, config["data_description"]["organism"],config["data_description"]["reference"], "index/BWA",config["data_description"]["reference"] + ".bwt"),
-        fa_ref = os.path.join(REF_DIR, config["data_description"]["organism"],config["data_description"]["reference"],"seq",config["data_description"]["reference"] + ".fa")
+        bam = "mapped/{sample}.not_markDups.bam",
+        bai = "mapped/{sample}.not_markDups.bam.bai",
+        bwa_ref = expand("{ref_dir}/index/BWA/{ref}.bwt",ref_dir=reference_directory,ref = config["reference"])[0],
+        fa_ref = expand("{ref_dir}/seq/{ref}.fa",ref_dir=reference_directory,ref = config["reference"])[0],
     output:
-        bam = os.path.join(DIR,"mapped/{sample}.umi_concensus.bam"),
-        bai = os.path.join(DIR,"mapped/{sample}.umi_concensus.bam.bai")
-    log: run = os.path.join(DIR,"sample_logs/{sample}/umi_concensus.log")
+        bam = "mapped/{sample}.umi_concensus.bam",
+        bai = "mapped/{sample}.umi_concensus.bam.bai"
+    log: run = "sample_logs/{sample}/umi_concensus.log"
     threads: 20
     resources: mem = 10
-    params: umi_fastq = os.path.join(DIR,"raw_fastq/{sample}.UMI.fastq"),
-            umi_temp_file = os.path.join(DIR,"mapped/{sample}.not_markDups.UMIannot.bam"),
-            umi_histogram = os.path.join(DIR,"map_qc/{sample}.umi_concensus.histogram"),
-            umi_temp_file2 = os.path.join(DIR,"mapped/{sample}.not_markDups.UMIcons.bam"),
+    params: umi_fastq = "raw_fastq/{sample}.UMI.fastq",
+            umi_temp_file = "mapped/{sample}.not_markDups.UMIannot.bam",
+            umi_histogram = map_qc/{sample}.umi_concensus.histogram",
+            umi_temp_file2 = "mapped/{sample}.not_markDups.UMIcons.bam",
             min_umi_size = 1,
             min_input_base_quality = 20,
             error_rate_pre_umi = 50,
@@ -58,17 +58,17 @@ rule umi_concensus:
 
 def merge_bams_input(wildcards):
     if config["data_description"]["replicates"] == True:
-        return os.path.join(DIR,"mapped/reseq/{sample}.{reseq}.bam")
+        return "mapped/reseq/{sample}.{reseq}.bam"
     else:
-        return os.path.join(DIR,"mapped/reseq/{sample}.bam")
+        return "mapped/reseq/{sample}.bam"
 # definovat {reseq} -> LIB_RESEQ = contig["data_description"]["replicates"]
 
 rule merge_bams:
     input: merge_bams_input
     output:
-        bam = os.path.join(DIR,"mapped/merged/{sample}.not_markDups.bam"),
-        bai = os.path.join(DIR,"mapped/merged/{sample}.not_markDups.bam.bai"),
-    log: run = os.path.join(DIR,"sample_logs/{sample}/merge_bams.log")
+        bam = "mapped/merged/{sample}.not_markDups.bam",
+        bai = "mapped/merged/{sample}.not_markDups.bam.bai",
+    log: run = "sample_logs/{sample}/merge_bams.log"
     threads: 10
     params: sample_name =  SAMPLE_NAME
     conda:  "../wrappers/merge_bams/env.yaml"
