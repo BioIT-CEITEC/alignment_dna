@@ -1,7 +1,7 @@
 # ALIGNMENT RULES
 #
 
-
+"""
 
 rule mark_duplicates:
     input:
@@ -15,15 +15,15 @@ rule mark_duplicates:
     resources: mem = 10
     params:
         mtx = "map_qc/{sample}/MarkDuplicates/{sample}.markDups_metrics.txt",
-        primer_based = config["analysis_parameters"]["primer_based"],
+        primer_based = config["primer_based"],
         rmDup = "false", # allow possibility for rm duplicates true
-        umi = config["analysis_parameters"]["umi"],
+        umi = config["UMI"],
         umi_fastq = "raw_fastq/{sample}.UMI.fastq",
         umi_temp_file = "mapped/{sample}.not_markDups.UMIannot.bam"
     conda:  "../wrappers/mark_duplicates/env.yaml"
     script: "../wrappers/mark_duplicates/script.py"
 
-"""
+
 
 
 rule umi_concensus:
@@ -40,7 +40,7 @@ rule umi_concensus:
     resources: mem = 10
     params: umi_fastq = "raw_fastq/{sample}.UMI.fastq",
             umi_temp_file = "mapped/{sample}.not_markDups.UMIannot.bam",
-            umi_histogram = map_qc/{sample}.umi_concensus.histogram",
+            umi_histogram = "map_qc/{sample}.umi_concensus.histogram",
             umi_temp_file2 = "mapped/{sample}.not_markDups.UMIcons.bam",
             min_umi_size = 1,
             min_input_base_quality = 20,
@@ -49,19 +49,19 @@ rule umi_concensus:
     conda:  "../wrappers/umi_concensus/env.yaml"
     script: "../wrappers/umi_concensus/script.py"
 
+
+
+
 """
 
-
 """
-
-
-
+"""
 def merge_bams_input(wildcards):
-    if config["data_description"]["replicates"] == True:
-        return "mapped/reseq/{sample}.{reseq}.bam"
+    if config["replicates"] == True:
+        return expand("mapped/reseq/{sample}.{reseq}.bam",sample = sample_tab.sample_name,reseq = config["replicates"])
     else:
-        return "mapped/reseq/{sample}.bam"
-# definovat {reseq} -> LIB_RESEQ = contig["data_description"]["replicates"]
+        return expand("mapped/{sample}.not_markDups.bam",sample = sample_tab.sample_name)
+
 
 rule merge_bams:
     input: merge_bams_input
@@ -70,22 +70,26 @@ rule merge_bams:
         bai = "mapped/merged/{sample}.not_markDups.bam.bai",
     log: run = "sample_logs/{sample}/merge_bams.log"
     threads: 10
-    params: sample_name =  SAMPLE_NAME
+    params: sample_name =  sample_tab.sample_name
     conda:  "../wrappers/merge_bams/env.yaml"
     script: "../wrappers/merge_bams/script.py"
 
-"""
 
 def alignment_DNA_input(wildcards):
-    if config["data_description"]["preprocess"] == True:
+    if config["preprocess"] == True:
         preprocessed = "cleaned_fastq"
     else:
         preprocessed = "raw_fastq"
 
-    if config["data_description"]["paired"] == "PE":
-        return [os.path.join(DIR,preprocessed,"{sample}_R1.fastq.gz"),os.path.join(DIR,preprocessed,"{sample}_R2.fastq.gz")]
+    #if config["lib_reverse_read_length"] == 0:
+    #    return expand(os.path.join(preprocessed,"{sample}_SE.fastq.gz"),sample=sample_tab.sample_name)
+    #else:
+    #    return [os.path.join(preprocessed,"{sample}_R1.fastq.gz"),os.path.join(preprocessed,"{sample}_R2.fastq.gz")]
+
+    if read_pair_tags == "":
+        return expand(os.path.join(preprocessed,"{sample}.fastq.gz"),sample=sample_tab.sample_name)
     else:
-        return os.path.join(DIR,preprocessed,"{sample}_SE.fastq.gz")
+        return [os.path.join(preprocessed,"{sample}_R1.fastq.gz"),os.path.join(preprocessed,"{sample}_R2.fastq.gz")]
 
 rule alignment_DNA:
     input:

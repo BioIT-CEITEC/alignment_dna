@@ -29,7 +29,7 @@ if isinstance(snakemake.input,list) and len(snakemake.input) > 1:
     shell(command)
 
     command = " samtools view -H " + snakemake.output.bam + ".temp.bam" +\
-              " | sed 's/SM:[^\\]*/SM:" + snakemake.params.sample_name[0] + "/' | samtools reheader /dev/stdin " +\
+              " | sed 's/SM:[^\\]*/SM:" + snakemake.params.sample_name + "/' | samtools reheader /dev/stdin " +\
               snakemake.output.bam + ".temp.bam >> " + snakemake.output.bam
 
     f = open(snakemake.log.run, 'at')
@@ -49,5 +49,5 @@ if isinstance(snakemake.input,list) and len(snakemake.input) > 1:
 
 else:
 
-    shell("mv -T " + snakemake.input[0] + " " + snakemake.output.bam)
-    shell("mv -T " + snakemake.input[0] + ".bai " + snakemake.output.bam + ".bai")
+    shell("mv -T " + snakemake.input + " " + snakemake.output.bam)
+    shell("mv -T " + snakemake.input + ".bai " + snakemake.output.bam + ".bai")

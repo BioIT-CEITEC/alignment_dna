@@ -15,20 +15,21 @@ reference_directory = os.path.join(GLOBAL_REF_PATH,config["organism"],config["re
 sample_tab = pd.DataFrame.from_dict(config["samples"],orient="index")
 print(sample_tab)
 
-#if config["lib_reverse_read_length"] == 0:
-#    read_pair_tags = [""]
-#else:
-#    read_pair_tags = ["_R1","_R2"]
+if config["lib_reverse_read_length"] == 0:
+    read_pair_tags = [""]
+else:
+    read_pair_tags = ["_R1","_R2"]
 
-#wildcard_constraints:
-#    sample = "|".join(sample_tab.sample_name),
-#    read_pair_tag = "(_R.)?"
+wildcard_constraints:
+    sample = "|".join(sample_tab.sample_name),
+    read_pair_tag = "(_R.)?"
 
 
 ##### Target rules #####
 
 rule all:
-   input: ""
+   input: expand("mapped/merged/{sample}.not_markDups.bam",sample = sample_tab.sample_name),
+          expand("mapped/merged/{sample}.not_markDups.bam.bai", sample = sample_tab.sample_name)
 
 ##### Modules #####
 
