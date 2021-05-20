@@ -19,7 +19,7 @@ PICARD = "picard"
 BWA = "bwa"
 
 shell.executable("/bin/bash")
-bwa_ref_prefix = re.sub(".bwt$","",snakemake.input.bwa_ref[0])
+bwa_ref_prefix = re.sub(".bwt$","",snakemake.input.bwa_ref)
 
 f = open(snakemake.log.run, 'at')
 umi_version = str(subprocess.Popen(FGBIO+" --version 2>&1 | grep \"[Vv]ersion\" | cut -f 2 -d \" \"",shell=True,stdout=subprocess.PIPE).communicate()[0], 'utf-8')
@@ -91,7 +91,7 @@ command =  PICARD +" -Xmx10g SamToFastq INPUT="+snakemake.params.umi_temp_file2 
            PICARD+" -Xmx10g MergeBamAlignment VALIDATION_STRINGENCY=SILENT CREATE_INDEX=true QUIET=true" \
                   +" UNMAPPED=" + snakemake.params.umi_temp_file2 \
                   +" ALIGNED=/dev/stdin O=" + snakemake.output.bam \
-                  +" R="+snakemake.input.fa_ref[0] \
+                  +" R="+snakemake.input.fa_ref \
                   +" ATTRIBUTES_TO_RETAIN=X0 ATTRIBUTES_TO_RETAIN=ZS ATTRIBUTES_TO_RETAIN=ZI ATTRIBUTES_TO_RETAIN=ZM ATTRIBUTES_TO_RETAIN=ZC ATTRIBUTES_TO_RETAIN=ZN \
                      RV=cd RV=ce ORIENTATIONS=FR MAX_GAPS=-1 SO=coordinate ALIGNER_PROPER_PAIR_FLAGS=false"\
                   +" >> " + snakemake.log.run + " 2>&1 "
