@@ -1,8 +1,37 @@
 {
-  "sample_name": ["BR-0764","BR-0767"],
-  "library_name": "210510_BRONCO44",
-  "library_scope": "BRONCO",
+  "library_name":"MOII_e88_krve",
+  "lib_forward_read_length":151,
+  "lib_reverse_read_length":151,
+  "UMI":"no_umi",
   "organism": "homsap",
-  "reference": "GRCh37-p13"
-
+  "reference": "GRCh37-p13",
+  "barcode_mismatches":0,
+  "base_mask_field":"",
+  "no_lane_splitting":true,
+  "preprocess": false,
+  "replicates": false,
+  "primer_based": false,
+  "additional_options":"",
+  "sample": {
+    "id4": {
+      "sample_name": "ES1903krev",
+      "i7_name": "A02",
+      "i7_sequence": "CGATGT"
+    }
+  },
+  "samples":{
+    "id4":{
+      "sample_name":"ES1903krev",
+      "i7_name":"A02",
+      "i7_sequence":"CGATGT"
+    },
+    "id5":{
+      "sample_name":"RT1207krev",
+      "i7_name":"A07",
+      "i7_sequence":"CAGATC"},
+    "id6":{
+      "sample_name":"AR0109krev",
+      "i7_name":"A19",
+      "i7_sequence":"GTGAAA"}
+    }
 }

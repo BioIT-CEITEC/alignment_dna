@@ -5,8 +5,8 @@
 
 rule mark_duplicates:
     input:
-        bam = "mapped/{sample}.not_markDups.bam",
-        bai = "mapped/{sample}.not_markDups.bam.bai"
+        bam = expand("mapped/{sample}.not_markDups.bam",sample = sample_tab.sample_name),
+        bai = expand("mapped/{sample}.not_markDups.bam.bai",sample = sample_tab.sample_name)
     output:
         bam = "mapped/marked_duplicates/{sample}.markDups.bam",
         bai = "mapped/marked_duplicates/{sample}.markDups.bam.bai"
@@ -55,12 +55,12 @@ rule umi_concensus:
 """
 
 """
-"""
+
 def merge_bams_input(wildcards):
     if config["replicates"] == True:
-        return expand("mapped/reseq/{sample}.{reseq}.bam",sample = sample_tab.sample_name,reseq = config["replicates"])
+        return expand("mapped/reseq/{sample}.{reseq}.bam",reseq = config["replicates"])
     else:
-        return expand("mapped/{sample}.not_markDups.bam",sample = sample_tab.sample_name)
+        return "mapped/{sample}.not_markDups.bam"
 
 
 rule merge_bams:
@@ -73,7 +73,7 @@ rule merge_bams:
     params: sample_name =  sample_tab.sample_name
     conda:  "../wrappers/merge_bams/env.yaml"
     script: "../wrappers/merge_bams/script.py"
-
+"""
 
 def alignment_DNA_input(wildcards):
     if config["preprocess"] == True:
@@ -81,15 +81,15 @@ def alignment_DNA_input(wildcards):
     else:
         preprocessed = "raw_fastq"
 
-    #if config["lib_reverse_read_length"] == 0:
-    #    return expand(os.path.join(preprocessed,"{sample}_SE.fastq.gz"),sample=sample_tab.sample_name)
-    #else:
-    #    return [os.path.join(preprocessed,"{sample}_R1.fastq.gz"),os.path.join(preprocessed,"{sample}_R2.fastq.gz")]
-
-    if read_pair_tags == "":
-        return expand(os.path.join(preprocessed,"{sample}.fastq.gz"),sample=sample_tab.sample_name)
+    if config["lib_reverse_read_length"] == 0:
+        return os.path.join(preprocessed,"{sample}_SE.fastq.gz")
     else:
         return [os.path.join(preprocessed,"{sample}_R1.fastq.gz"),os.path.join(preprocessed,"{sample}_R2.fastq.gz")]
+
+    #if read_pair_tags == "":
+    #    return os.path.join(preprocessed,"{sample}.fastq.gz")
+    #else:
+    #    return [os.path.join(preprocessed,"{sample}_R1.fastq.gz"),os.path.join(preprocessed,"{sample}_R2.fastq.gz")]
 
 rule alignment_DNA:
     input:
