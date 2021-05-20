@@ -26,10 +26,13 @@ wildcard_constraints:
 
 
 ##### Target rules #####
-
 rule all:
-   input: expand("mapped/merged/{sample}.not_markDups.bam",sample = sample_tab.sample_name),
-          expand("mapped/merged/{sample}.not_markDups.bam.bai", sample = sample_tab.sample_name)
+    input:  expand("mapped/{sample}.bam",sample = sample_tab.sample_name),
+            expand("mapped/{sample}.bam.bai", sample = sample_tab.sample_name),
+
+#rule all:
+#   input: expand("mapped/merged/{sample}.not_markDups.bam",sample = sample_tab.sample_name),
+#          expand("mapped/merged/{sample}.not_markDups.bam.bai", sample = sample_tab.sample_name)
 
 ##### Modules #####
 
