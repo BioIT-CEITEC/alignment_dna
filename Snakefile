@@ -4,7 +4,7 @@ from snakemake.utils import min_version
 
 min_version("5.18.0")
 
-GLOBAL_REF_PATH = "/mnt/ssd/ssd_3/references"
+GLOBAL_REF_PATH = "/mnt/references"
 
 # Folders
 #
@@ -29,10 +29,6 @@ wildcard_constraints:
 rule all:
     input:  expand("mapped/{sample}.bam",sample = sample_tab.sample_name),
             expand("mapped/{sample}.bam.bai", sample = sample_tab.sample_name),
-
-#rule all:
-#   input: expand("mapped/merged/{sample}.not_markDups.bam",sample = sample_tab.sample_name),
-#          expand("mapped/merged/{sample}.not_markDups.bam.bai", sample = sample_tab.sample_name)
 
 ##### Modules #####
 

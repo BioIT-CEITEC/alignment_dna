@@ -1,49 +1,39 @@
 ######################################
 # wrapper for rule: alignment_DNA
 ######################################
-import os
-import sys
-import math
-import subprocess
 import re
+import subprocess
 from snakemake.shell import shell
+shell.executable("/bin/bash")
+log_filename = str(snakemake.log)
 
-
-f = open(snakemake.log.run, 'a+')
-f.write("\n##\n## RULE: alignment_DNA \n##\n")
+f = open(log_filename, 'wt')
+f.write("\n##\n## RULE: raw_fastq_qc \n##\n")
 f.close()
 
-TOOL = "bwa"
-SAMTOOLS = "samtools"
-bwa_ref_prefix = re.sub(".bwt$","",snakemake.input.ref)
-
-shell.executable("/bin/bash")
-
-version = str(subprocess.Popen(TOOL+" 2>&1 | grep \"[Vv]ersion\" | cut -f 2 -d \" \"", shell=True, stdout=subprocess.PIPE).communicate()[0], 'utf-8')
-f = open(snakemake.log.run, 'at')
+version = str(subprocess.Popen("bwa 2>&1 | grep \"[Vv]ersion\" | cut -f 2 -d \" \"", shell=True, stdout=subprocess.PIPE).communicate()[0], 'utf-8')
+f = open(log_filename, 'at')
 f.write("## VERSION: BWA "+version+"\n")
 f.close()
 
-version = str(subprocess.Popen(SAMTOOLS+" --version 2>&1 | grep \"samtools\" ", shell=True, stdout=subprocess.PIPE).communicate()[0], 'utf-8')
-f = open(snakemake.log.run, 'at')
-f.write("## VERSION: "+version+"\n")
+version = str(subprocess.Popen("samtools --version 2>&1 | grep \"samtools\" ", shell=True, stdout=subprocess.PIPE).communicate()[0], 'utf-8')
+f = open(log_filename, 'at')
+f.write("## VERSION: samtools "+version+"\n")
 f.close()
 
-if hasattr(snakemake.input, 'fastq2'):
-    fastq2_file = snakemake.input.fastq2 + " "
-else:
-    fastq2_file = ""
+bwa_ref_prefix = re.sub(".bwt$","",snakemake.input.ref)
 
-command = TOOL+" mem -t "+str(snakemake.threads)+" -R '@RG\\tID:"+snakemake.params.lib_name+"_"+snakemake.wildcards.sample+"\\tSM:"+snakemake.wildcards.sample+"\\tPL:illumina' \
-    -v 1 "+bwa_ref_prefix+" " + " ".join(snakemake.input.fastqs) + " 2>> "+snakemake.log.run+" | " \
-    +SAMTOOLS+" sort -@ "+str(snakemake.threads)+" -o "+snakemake.output.bam+" /dev/stdin 2>> "+snakemake.log.run
-f = open(snakemake.log.run, 'at')
+command = "bwa mem -t "+str(snakemake.threads)+\
+        " -R '@RG\\tID:"+snakemake.params.lib_name+"_"+snakemake.wildcards.sample+"\\tSM:"+snakemake.wildcards.sample+"\\tPL:illumina' -v 1 " +\
+        bwa_ref_prefix + " " + " ".join(snakemake.input.fastqs) + " 2>> " + log_filename + " | " +\
+        "samtools sort -@ " +str(snakemake.threads)+" -o "+snakemake.output.bam+" /dev/stdin 2>> "+log_filename
+f = open(log_filename, 'at')
 f.write("## COMMAND: "+command+"\n")
 f.close()
 shell(command)
 
-command = SAMTOOLS+" index -b "+snakemake.output.bam+" 2>> "+snakemake.log.run
-f = open(snakemake.log.run, 'at')
+command = "samtools index -b "+snakemake.output.bam+" 2>> "+log_filename
+f = open(log_filename, 'at')
 f.write("## COMMAND: "+command+"\n")
 f.close()
 shell(command)
