@@ -4,12 +4,12 @@
 
 def pull_merge_after_alignment_input(wildcards):
     if config["replicates"] != False:
-        if expand(os.path.isfile("mapped/{sample}{rep}.bam"),rep = config["replicates"]):
+        if expand(os.path.isfile("mapped/{sample}{rep}.bam"),sample=sample_tab.sample_name,rep = config["replicates"]):
             return "mapped/{sample}{rep}.bam"
         else:
-            return expand("mapped/{sample}{rep}.{umi_usage}.bam",umi_usage = sample_tab.umi_usage)
+            return expand("mapped/{sample}{rep}.{umi_usage}.bam",sample=sample_tab.sample_name,umi_usage = config["umi_usage"])
     else:
-        return "mapped/{sample}.{umi_usage}.bam"
+        return expand("mapped/{sample}.{umi_usage}.bam",sample=sample_tab.sample_name,umi_usage = config["umi_usage"])
 
 
 rule pull_merge_after_alignment:
@@ -17,6 +17,8 @@ rule pull_merge_after_alignment:
     output: bam = "mapped/{sample}.bam",
             bai = "mapped/{sample}.bam.bai",
     log:    run = "sample_logs/{sample}/pull_merge_after_alignment.log"
+    threads: 10
+    params: sample_name = sample_tab.sample_name
     shell: "touch {output}"
 
 
@@ -28,6 +30,15 @@ rule mark_duplicates:
         bam="mapped/{sample}.markDups.bam",
         bai="mapped/{sample}.markDups.bam.bai"
     log: run="sample_logs/{sample}/mark_duplicates.log"
+    threads: 8
+    resources: mem = 10
+    params:
+        mtx = "map_qc/{sample}/MarkDuplicates/{sample}.markDups_metrics.txt",
+        primer_based = config["primer_based"],
+        rmDup = "false", # allow possibility for rm duplicates true
+        umi = config["UMI"],
+        umi_fastq = "raw_fastq/{sample}.UMI.fastq",
+        umi_temp_file = "mapped/{sample}.not_markDups.UMIannot.bam"
     shell: "touch {output}"
 
 
@@ -41,6 +52,16 @@ rule umi_concensus:
         bam="mapped/{sample}.umi_concensus.bam",
         bai="mapped/{sample}.umi_concensus.bam.bai"
     log: run="sample_logs/{sample}/umi_concensus.log"
+    threads: 20
+    resources: mem = 10
+    params: umi_fastq = "raw_fastq/{sample}.UMI.fastq",
+            umi_temp_file = "mapped/{sample}.not_markDups.UMIannot.bam",
+            umi_histogram = "map_qc/{sample}.umi_concensus.histogram",
+            umi_temp_file2 = "mapped/{sample}.not_markDups.UMIcons.bam",
+            min_umi_size = 1,
+            min_input_base_quality = 20,
+            error_rate_pre_umi = 50,
+            error_rate_post_umi = 30
     shell: "touch {output}"
 
 
@@ -84,6 +105,8 @@ rule alignment_DNA:
         bam = "mapped/{sample}.not_markDups.bam",
         bai = "mapped/{sample}.not_markDups.bam.bai"
     log: run = "sample_logs/{sample}/alignment_DNA.log"
+    params: lib_name = config["library_name"]
+    threads: 40
     shell: "touch {output}"
 """
 
