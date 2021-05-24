@@ -12,7 +12,7 @@
   "remove_duplicates":true,
   "keep_not_markDups_bam":false,
   "umi_usage": "mark_duplicates",
-  "umi_consensus_min_support":1
+  "umi_consensus_min_support":1,
   "samples":{
     "id4":{
       "sample_name":"ES1903krev",
