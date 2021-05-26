@@ -2,28 +2,28 @@
   "library_name":"MOII_e88_krve",
   "lib_forward_read_length":151,
   "lib_reverse_read_length":151,
-  "UMI":"no_umi",
+  "UMI":"BRONCO",
   "organism": "homsap",
   "reference": "GRCh37-p13",
-  "lib_ROI":"TruSeq_Exome",
+  "lib_ROI":"BRONCO",
   "trim_adapters": false,
   "trim_quality": false,
   "mark_duplicates":true,
   "remove_duplicates":true,
   "keep_not_markDups_bam":false,
-  "umi_usage": "mark_duplicates",
+  "umi_usage": "umi_concensus",
   "umi_consensus_min_support":1,
   "samples":{
     "id4":{
-      "sample_name":"ES1903krev",
+      "sample_name":"H-0246",
       "i7_name":"A02",
       "i7_sequence":"CGATGT"},
     "id5":{
-      "sample_name":"RT1207krev",
+      "sample_name":"BR-0764",
       "i7_name":"A07",
       "i7_sequence":"CAGATC"},
     "id6":{
-      "sample_name":"AR0109krev",
+      "sample_name":"BR-0764",
       "i7_name":"A19",
       "i7_sequence":"GTGAAA"}
   }
