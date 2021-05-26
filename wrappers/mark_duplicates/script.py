@@ -51,7 +51,7 @@ if snakemake.params.mark_duplicates == True:
                       "INPUT=" + snakemake.input.bam +\
                       " OUTPUT="+snakemake.output.bam+\
                       " METRICS_FILE="+snakemake.params.mtx+\
-                      " REMOVE_DUPLICATES="+snakemake.params.rmDup+ \
+                      " REMOVE_DUPLICATES="+str(snakemake.params.rmDup)+ \
                       " ASSUME_SORTED=true" + \
                       " PROGRAM_RECORD_ID=null"+ \
                       " VALIDATION_STRINGENCY=LENIENT"+ \
@@ -76,11 +76,16 @@ if snakemake.params.mark_duplicates == True:
             f.write("## VERSION: gencore "+version+"\n")
             f.close()
 
-            command ="gencore -i "+snakemake.input.bam+" -o "+snakemake.output.bam+" -r "+str(snakemake.input.fa)+" -b "+str(snakemake.input.lib_ROI)+" -s "+str(snakemake.params.umi_consensus_min_support)+" 2>> "+snakemake.log.run+" "
+            command ="gencore -i "+snakemake.input.bam+" -o "+snakemake.output.bam+" --ref "+str(snakemake.input.fa)+" --bed "+str(snakemake.input.lib_ROI)+" --supporting_reads "+str(snakemake.params.umi_consensus_min_support)+\
+                     " --html "+snakemake.params.report_path+"umi_concensus.html"+\
+                     " --json "+snakemake.params.report_path+"umi_concensus.json"+\
+                     " 2>> "+snakemake.log.run+" "
+
             f = open(snakemake.log.run, 'at')
             f.write("## COMMAND: "+command+"\n")
             f.close()
             shell(command)
+
 
             command = "samtools index "+snakemake.output.bam
             f = open(snakemake.log.run, 'at')
@@ -95,7 +100,7 @@ if snakemake.params.mark_duplicates == True:
         f.close()
         shell(command)
 
-    
+
         command = "rm " + snakemake.input.bam + ".bai"
         f = open(snakemake.log.run, 'at')
         f.write("## COMMAND: " + command + "\n")
