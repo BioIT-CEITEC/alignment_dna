@@ -15,16 +15,10 @@
   "umi_consensus_min_support":1,
   "samples":{
     "id4":{
-      "sample_name":"H-0246",
-      "i7_name":"A02",
-      "i7_sequence":"CGATGT"},
+      "sample_name":"H-0246"},
     "id5":{
-      "sample_name":"BR-0764",
-      "i7_name":"A07",
-      "i7_sequence":"CAGATC"},
+      "sample_name":"BR-0764"},
     "id6":{
-      "sample_name":"BR-0767",
-      "i7_name":"A19",
-      "i7_sequence":"GTGAAA"}
+      "sample_name":"BR-0767"}
   }
 }
