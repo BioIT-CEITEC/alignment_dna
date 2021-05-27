@@ -53,3 +53,14 @@ rule alignment_DNA:
     threads: 40
     conda: "../wrappers/alignment_DNA/env.yaml"
     script: "../wrappers/alignment_DNA/script.py"
+
+
+####################################
+# REFERENCE INFO PREPARATION
+#
+
+rule ref_info_copy:
+    input:  expand("{ref_dir}/info.txt", zip , ref_dir=reference_directory)[0],
+    output: "genomic_reference_info.txt",
+    run:
+        shell(" cp {input} {output} ")
