@@ -1,28 +1,8 @@
-# ALIGNMENT RULES
-#
-
-#
-# def pull_merge_after_alignment_input(wildcards):
-#     if config["replicates"] != False:
-#         if expand(os.path.isfile("mapped/{sample}{rep}.bam"),rep = config["replicates"]):
-#             return "mapped/{sample}{rep}.bam"
-#         else:
-#             return expand("mapped/{sample}{rep}.{umi_usage}.bam",umi_usage = sample_tab.umi_usage)
-#     else:
-#         return "mapped/{sample}.{umi_usage}.bam"
-#
-#
-# rule pull_merge_after_alignment:
-#     input:  pull_merge_after_alignment_input
-#     output: bam = "mapped/{sample}.bam",
-#             bai = "mapped/{sample}.bam.bai",
-#     log:    run = "sample_logs/{sample}/pull_merge_after_alignment.log"
-#     shell: "touch {output}"
 
 def mark_duplicates_ref(wildcards):
     input = {
-        'bam': expand("mapped/{sample}.not_markDups.bam",sample=sample_tab.sample_name)[0],
-        'bai': expand("mapped/{sample}.not_markDups.bam.bai",sample=sample_tab.sample_name)[0],
+        'bam': "mapped/{sample}.not_markDups.bam",
+        'bai': "mapped/{sample}.not_markDups.bam.bai",
     }
     if config["umi_usage"] == "umi_concensus":
         input['ref'] = expand("{ref_dir}/index/BWA/{ref}.bwt",ref_dir=reference_directory,ref=config["reference"])[0],
@@ -52,7 +32,7 @@ rule mark_duplicates:
 
 
 def alignment_DNA_input(wildcards):
-    if config["preprocess"] == True:
+    if config["trim_adapters"] == True or config["trim_quality"] == True:
         preprocessed = "cleaned_fastq"
     else:
         preprocessed = "raw_fastq"
