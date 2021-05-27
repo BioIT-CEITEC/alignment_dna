@@ -1,7 +1,6 @@
 {
   "workflow_description": {
     "name": "alignment_DNA",
-    "version": 1.0,
     "label": "Alignment DNA",
     "type": "alignment_DNA",
     "inputs": "*/{sample}_R*.fastq.gz",
