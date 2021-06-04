@@ -7,27 +7,27 @@ min_version("5.18.0")
 
 GLOBAL_REF_PATH = "/mnt/references/"
 
-##### Config processing #####
-# Folders
-#
-reference_directory = os.path.join(GLOBAL_REF_PATH,config["organism"],config["reference"])
-
 # Reference processing
 #
 if config["lib_ROI"] != "wgs":
     # setting reference from lib_ROI
-    f = open(os.path.join(GLOBAL_REF_PATH,"reference_info","lib_ROI"),)
+    f = open(os.path.join(GLOBAL_REF_PATH,"reference_info","DNA_ROI.json"))
     lib_ROI_dict = json.load(f)
     f.close()
-    config["reference"] = [ref_name for ref_name in lib_ROI_dict.keys() if type(lib_ROI_dict[ref_name]) == "dictionary" and config["lib_ROI"] in lib_ROI_dict[ref_name].values()][0]
+    config["reference"] = [ref_name for ref_name in lib_ROI_dict.keys() if isinstance(lib_ROI_dict[ref_name],dict) and config["lib_ROI"] in lib_ROI_dict[ref_name].values()][0]
 
 
 # setting organism from reference
-f = open(os.path.join(GLOBAL_REF_PATH,"reference_info","reference"),)
+f = open(os.path.join(GLOBAL_REF_PATH,"reference_info","genomic_references.json"),)
 reference_dict = json.load(f)
 f.close()
-config["organism"] = [organism_name for organism_name in reference_dict.keys() if type(reference_dict[organism_name]) == "dictionary" and config["reference"] in reference_dict[organism_name].values()][0]
+config["organism"] = [organism_name for organism_name in reference_dict.keys() if isinstance(reference_dict[organism_name],dict) and config["reference"] in reference_dict[organism_name].values()][0]
 
+
+##### Config processing #####
+# Folders
+#
+reference_directory = os.path.join(GLOBAL_REF_PATH,config["organism"],config["reference"])
 
 # Samples
 #

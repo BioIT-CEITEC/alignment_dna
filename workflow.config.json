@@ -1,8 +1,9 @@
 {
   "workflow_description": {
     "name": "alignment_DNA",
+    "version": 1.0,
     "label": "Alignment DNA",
-    "type": "alignment_DNA",
+    "type": "alignment_dna",
     "inputs": "*/{sample}_R*.fastq.gz",
     "outputs": [
       "mapped/{sample}.bam",
@@ -54,9 +55,10 @@
         "list": {
           "wgs": "WGS or no DNA panel",
           "GRCh37-p13": {
+            "TP53_amplicon" : "TP53 amplicon",
             "BRONCO": "BRONCO",
-            "MedExome_GRCh37": "MedExome_GRCh37",
-            "TruSeq_Exome": "TruSeq_Exome",
+            "MedExome_GRCh37": "MedExome GRCh37",
+            "TruSeq_Exome": "TruSeq Exome",
             "OncoZoom": "OncoZoom"
           },
           "GRCh38-p10": {
@@ -113,7 +115,7 @@
           "Brassica napus": {
             "AST_PRJEB5043_v1": "AST_PRJEB5043_v1",
             "Bra_napus_v2": "Bra_napus_v2"
-          },:
+          },
           "Saccharomyces cerevisiae": {
             "R64-1-1.100": "R64-1-1.100"
           },
