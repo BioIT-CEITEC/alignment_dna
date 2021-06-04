@@ -93,19 +93,19 @@ if snakemake.params.mark_duplicates == True:
             f.close()
             shell(command)
 
-    # if snakemake.params.keep_not_markDups_bam == False:
-    #     command = "rm " + snakemake.input.bam
-    #     f = open(snakemake.log.run, 'at')
-    #     f.write("## COMMAND: " + command + "\n")
-    #     f.close()
-    #     shell(command)
-    #
-    #
-    #     command = "rm " + snakemake.input.bam + ".bai"
-    #     f = open(snakemake.log.run, 'at')
-    #     f.write("## COMMAND: " + command + "\n")
-    #     f.close()
-    #     shell(command)
+    if snakemake.params.keep_not_markDups_bam == False:
+        command = "rm " + snakemake.input.bam
+        f = open(snakemake.log.run, 'at')
+        f.write("## COMMAND: " + command + "\n")
+        f.close()
+        shell(command)
+
+
+        command = "rm " + snakemake.input.bam + ".bai"
+        f = open(snakemake.log.run, 'at')
+        f.write("## COMMAND: " + command + "\n")
+        f.close()
+        shell(command)
 
 else:
 
