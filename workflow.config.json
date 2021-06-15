@@ -55,7 +55,7 @@
         "list": {
           "wgs": "WGS or no DNA panel",
           "GRCh37-p13": {
-            "TP53_amplicon" : "TP53 amplicon",
+            "TP53_amplicon": "TP53 amplicon",
             "BRONCO": "BRONCO",
             "MedExome_GRCh37": "MedExome GRCh37",
             "TruSeq_Exome": "TruSeq Exome",

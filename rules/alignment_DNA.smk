@@ -1,3 +1,38 @@
+# ####################################
+# # REFERENCE INFO PREPARATION
+# #
+#
+# rule ref_info_copy:
+#     input:  expand("{ref_dir}/info.txt", zip , ref_dir=reference_directory)[0],
+#     output: "genomic_reference_info.txt",
+#     run:
+#         shell(" cp {input} {output} ")
+
+
+
+def alignment_DNA_input(wildcards):
+    if config["trim_adapters"] == True or config["trim_quality"] == True:
+        preprocessed = "cleaned_fastq"
+    else:
+        preprocessed = "raw_fastq"
+    if read_pair_tags == "":
+        return os.path.join(preprocessed,"{sample}.fastq.gz")
+    else:
+        return [os.path.join(preprocessed,"{sample}_R1.fastq.gz"),os.path.join(preprocessed,"{sample}_R2.fastq.gz")]
+
+rule alignment_DNA:
+    input:
+        fastqs = alignment_DNA_input,
+        ref = expand("{ref_dir}/index/BWA/{ref}.bwt",ref_dir=reference_directory,ref = config["reference"])[0],
+    output:
+        bam = "mapped/{sample}.not_markDups.bam",
+        bai = "mapped/{sample}.not_markDups.bam.bai"
+    log: "sample_logs/{sample}/alignment_DNA.log"
+    params: lib_name=config["library_name"]
+    threads: 40
+    conda: "../wrappers/alignment_DNA/env.yaml"
+    script: "../wrappers/alignment_DNA/script.py"
+
 
 def mark_duplicates_ref(wildcards):
     input = {
@@ -29,38 +64,3 @@ rule mark_duplicates:
         report_path = "map_qc/{sample}/MarkDuplicates/"
     conda:  "../wrappers/mark_duplicates/env.yaml"
     script: "../wrappers/mark_duplicates/script.py"
-
-
-def alignment_DNA_input(wildcards):
-    if config["trim_adapters"] == True or config["trim_quality"] == True:
-        preprocessed = "cleaned_fastq"
-    else:
-        preprocessed = "raw_fastq"
-    if read_pair_tags == "":
-        return os.path.join(preprocessed,"{sample}.fastq.gz")
-    else:
-        return [os.path.join(preprocessed,"{sample}_R1.fastq.gz"),os.path.join(preprocessed,"{sample}_R2.fastq.gz")]
-
-rule alignment_DNA:
-    input:
-        fastqs = alignment_DNA_input,
-        ref = expand("{ref_dir}/index/BWA/{ref}.bwt",ref_dir=reference_directory,ref = config["reference"])[0],
-    output:
-        bam = "mapped/{sample}.not_markDups.bam",
-        bai = "mapped/{sample}.not_markDups.bam.bai"
-    log: "sample_logs/{sample}/alignment_DNA.log"
-    params: lib_name=config["library_name"]
-    threads: 40
-    conda: "../wrappers/alignment_DNA/env.yaml"
-    script: "../wrappers/alignment_DNA/script.py"
-
-
-####################################
-# REFERENCE INFO PREPARATION
-#
-
-rule ref_info_copy:
-    input:  expand("{ref_dir}/info.txt", zip , ref_dir=reference_directory)[0],
-    output: "genomic_reference_info.txt",
-    run:
-        shell(" cp {input} {output} ")
