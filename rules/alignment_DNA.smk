@@ -27,7 +27,7 @@ rule alignment_DNA:
     output:
         bam = "mapped/{sample}.not_markDups.bam",
         bai = "mapped/{sample}.not_markDups.bam.bai"
-    log: "sample_logs/{sample}/alignment_DNA.log"
+    log: "logs/{sample}/alignment_DNA.log"
     params: lib_name=config["library_name"]
     threads: 40
     conda: "../wrappers/alignment_DNA/env.yaml"
@@ -50,7 +50,7 @@ rule mark_duplicates:
     output:
         bam="mapped/{sample}.bam",
         bai="mapped/{sample}.bam.bai"
-    log: run = "sample_logs/{sample}/mark_duplicates.log"
+    log: "logs/{sample}/mark_duplicates.log"
     threads: 8
     resources: mem = 10
     params:
