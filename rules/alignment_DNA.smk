@@ -15,7 +15,7 @@ def alignment_DNA_input(wildcards):
         preprocessed = "cleaned_fastq"
     else:
         preprocessed = "raw_fastq"
-    if read_pair_tags == "":
+    if read_pair_tags == [""]:
         return os.path.join(preprocessed,"{sample}.fastq.gz")
     else:
         return [os.path.join(preprocessed,"{sample}_R1.fastq.gz"),os.path.join(preprocessed,"{sample}_R2.fastq.gz")]
