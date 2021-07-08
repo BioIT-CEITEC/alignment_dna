@@ -19,24 +19,6 @@
   ],
   "gui_params": {
     "primary": {
-      "UMI": {
-        "label": "UMI",
-        "type": "enum",
-        "default": "no_umi",
-        "list": {
-          "no_umi": "No UMI",
-          "BRONCO": "BRONCO",
-          "Quantseq FWD": "Quantseq FWD",
-          "CORALL": "CORALL",
-          "custom_umi": "Custom specified UMI",
-          "CS_UMI": "CS_UMI",
-          "CS_UMI_sep_file": "CS_UMI_sep_file",
-          "IDT": "IDT",
-          "BRB": "BRB",
-          "LYNX": "LYNX",
-          "Qiaseq": "Qiaseq"
-        }
-      },
       "umi_usage": {
         "label": "UMI usage",
         "type": "enum",
