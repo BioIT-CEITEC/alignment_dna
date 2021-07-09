@@ -4,7 +4,7 @@
     "version": 1.0,
     "label": "Alignment DNA",
     "type": "alignment_dna",
-    "inputs": "*/{sample}_R*.fastq.gz",
+    "inputs": "*/{sample}*fastq.gz",
     "outputs": [
       "mapped/{sample}.bam",
       "mapped/{sample}.bam.bai",

@@ -8,7 +8,7 @@ shell.executable("/bin/bash")
 log_filename = str(snakemake.log)
 
 f = open(log_filename, 'wt')
-f.write("\n##\n## RULE: raw_fastq_qc \n##\n")
+f.write("\n##\n## RULE: alignment_DNA \n##\n")
 f.close()
 
 version = str(subprocess.Popen("bwa 2>&1 | grep \"[Vv]ersion\" | cut -f 2 -d \" \"", shell=True, stdout=subprocess.PIPE).communicate()[0], 'utf-8')
