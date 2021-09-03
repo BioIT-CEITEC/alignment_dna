@@ -17,13 +17,13 @@ f = open(log_filename, 'at')
 f.write("## VERSION: "+version+"\n")
 f.close()
 
-command = "samtools idxstats "+snakemake.input.bam+" > "+snakemake.output.idxstats+" 2>> "+log_filename+" "
+command = "samtools idxstats "+snakemake.input.bam[0]+" > "+snakemake.output.idxstats[0]+" 2>> "+log_filename+" "
 f = open(log_filename, 'at')
 f.write("## COMMAND: "+command+"\n")
 f.close()
 shell(command)
 
-command ="samtools flagstat "+snakemake.input.bam+" > "+snakemake.output.flagstats+" 2>> "+log_filename+" "
+command ="samtools flagstat "+snakemake.input.bam[0]+" > "+snakemake.output.flagstats[0]+" 2>> "+log_filename+" "
 f = open(log_filename, 'at')
 f.write("## COMMAND: "+command+"\n")
 f.close()

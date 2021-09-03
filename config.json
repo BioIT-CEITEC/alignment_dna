@@ -1,0 +1,65 @@
+{
+    "library_name": "210510_BRONCO44",
+    "lib_forward_read_length": 150,
+    "lib_reverse_read_length": 150,
+    "UMI": "BRONCO",
+    "umi_usage": "umi_concensus",
+    "lib_ROI": "BRONCO",
+    "reference": "GRCh37-p13",
+    "trim_adapters": false,
+    "mark_duplicates": true,
+    "trim_quality": false,
+    "remove_duplicates": true,
+    "keep_not_markDups_bam": false,
+    "umi_consensus_min_support": 1,
+    "samples": {
+        "11": {
+            "sample_name": "BR-0896"
+        },
+        "12": {
+            "sample_name": "BR-0902"
+        },
+        "13": {
+            "sample_name": "BR-0903"
+        },
+        "14": {
+            "sample_name": "BR-0904"
+        },
+        "15": {
+            "sample_name": "BR-0905"
+        },
+        "16": {
+            "sample_name": "BR-0908"
+        },
+        "17": {
+            "sample_name": "BR-0907"
+        },
+        "18": {
+            "sample_name": "BR-0909"
+        },
+        "19": {
+            "sample_name": "BR-0910"
+        },
+        "20": {
+            "sample_name": "BR-0911"
+        },
+        "21": {
+            "sample_name": "BR-0912"
+        },
+        "22": {
+            "sample_name": "H-0005"
+        },
+        "23": {
+            "sample_name": "H-0319"
+        },
+        "24": {
+            "sample_name": "H-0320"
+        },
+        "25": {
+            "sample_name": "H-0321"
+        },
+        "26": {
+            "sample_name": "H-0322"
+        }
+    }
+}

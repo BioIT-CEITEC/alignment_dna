@@ -23,14 +23,14 @@ if snakemake.params.mark_duplicates == True:
         f.write("## VERSION: Picard "+version+"\n")
         f.close()
 
-        command = "picard MarkDuplicates INPUT="+snakemake.input.bam+" OUTPUT="+snakemake.output.bam+" METRICS_FILE="+snakemake.params.mtx+" REMOVE_DUPLICATES="+str(snakemake.params.rmDup)+ " \
+        command = "picard MarkDuplicates INPUT="+snakemake.input.bam[0]+" OUTPUT="+snakemake.output.bam[0]+" METRICS_FILE="+snakemake.params.mtx+" REMOVE_DUPLICATES="+str(snakemake.params.rmDup)+ " \
             ASSUME_SORTED=true PROGRAM_RECORD_ID=null VALIDATION_STRINGENCY=LENIENT -Xmx" +str(snakemake.resources.mem)+"g 2>> "+log_filename+" "
         f = open(log_filename, 'at')
         f.write("## COMMAND: "+command+"\n")
         f.close()
         shell(command)
 
-        command = "samtools index "+snakemake.output.bam
+        command = "samtools index "+snakemake.output.bam[0]
         f = open(log_filename, 'at')
         f.write("## COMMAND: "+command+"\n")
         f.close()
@@ -46,8 +46,8 @@ if snakemake.params.mark_duplicates == True:
             java_opts = "export _JAVA_OPTIONS='-Xmx"+str(snakemake.resources.mem)+"g'"
 
             command = java_opts + "&& je markdupes " + \
-                      "INPUT=" + snakemake.input.bam +\
-                      " OUTPUT="+snakemake.output.bam+\
+                      "INPUT=" + snakemake.input.bam[0] +\
+                      " OUTPUT="+snakemake.output.bam[0]+\
                       " METRICS_FILE="+snakemake.params.mtx+\
                       " REMOVE_DUPLICATES="+str(snakemake.params.rmDup)+ \
                       " ASSUME_SORTED=true" + \
@@ -62,7 +62,7 @@ if snakemake.params.mark_duplicates == True:
             f.close()
             shell(command)
 
-            command = "samtools index -@" + str(snakemake.threads) + " " + snakemake.output.bam
+            command = "samtools index -@" + str(snakemake.threads) + " " + snakemake.output.bam[0]
             f = open(log_filename, 'at')
             f.write("## COMMAND: "+command+"\n")
             f.close()
@@ -74,7 +74,7 @@ if snakemake.params.mark_duplicates == True:
             f.write("## VERSION: gencore "+version+"\n")
             f.close()
 
-            command ="gencore -i "+snakemake.input.bam+" -o "+snakemake.output.bam+" --ref "+str(snakemake.input.fa)+" --bed "+str(snakemake.input.lib_ROI)+" --supporting_reads "+str(snakemake.params.umi_consensus_min_support)+\
+            command ="gencore -i "+snakemake.input.bam[0]+" -o "+snakemake.output.bam[0]+" --ref "+str(snakemake.input.fa)+" --bed "+str(snakemake.input.lib_ROI)+" --supporting_reads "+str(snakemake.params.umi_consensus_min_support)+\
                      " --html "+snakemake.params.report_path+"umi_concensus.html"+\
                      " --json "+snakemake.params.report_path+"umi_concensus.json"+\
                      " 2>> "+log_filename+" "
@@ -85,21 +85,21 @@ if snakemake.params.mark_duplicates == True:
             shell(command)
 
 
-            command = "samtools index "+snakemake.output.bam
+            command = "samtools index "+snakemake.output.bam[0]
             f = open(log_filename, 'at')
             f.write("## COMMAND: "+command+"\n")
             f.close()
             shell(command)
 
     if snakemake.params.keep_not_markDups_bam == False:
-        command = "rm " + snakemake.input.bam
+        command = "rm " + snakemake.input.bam[0]
         f = open(log_filename, 'at')
         f.write("## COMMAND: " + command + "\n")
         f.close()
         shell(command)
 
 
-        command = "rm " + snakemake.input.bam + ".bai"
+        command = "rm " + snakemake.input.bam[0] + ".bai"
         f = open(log_filename, 'at')
         f.write("## COMMAND: " + command + "\n")
         f.close()
@@ -107,5 +107,5 @@ if snakemake.params.mark_duplicates == True:
 
 else:
 
-    shell("mv -T " + snakemake.input.bam + " " + snakemake.output.bam)
-    shell("mv -T " + snakemake.input.bai + " " + snakemake.output.bai)
+    shell("mv -T " + snakemake.input.bam[0] + " " + snakemake.output.bam[0])
+    shell("mv -T " + snakemake.input.bai[0] + " " + snakemake.output.bai[0])
