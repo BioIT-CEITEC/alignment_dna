@@ -11,14 +11,9 @@ f = open(log_filename, 'wt')
 f.write("\n##\n## RULE: alignment_DNA \n##\n")
 f.close()
 
-version = str(subprocess.Popen("bwa 2>&1 | grep \"[Vv]ersion\" | cut -f 2 -d \" \"", shell=True, stdout=subprocess.PIPE).communicate()[0], 'utf-8')
+version = str(subprocess.Popen("conda list ", shell=True, stdout=subprocess.PIPE).communicate()[0], 'utf-8')
 f = open(log_filename, 'at')
-f.write("## VERSION: BWA "+version+"\n")
-f.close()
-
-version = str(subprocess.Popen("samtools --version 2>&1 | grep \"samtools\" ", shell=True, stdout=subprocess.PIPE).communicate()[0], 'utf-8')
-f = open(log_filename, 'at')
-f.write("## VERSION: samtools "+version+"\n")
+f.write("## CONDA: "+version+"\n")
 f.close()
 
 bwa_ref_prefix = re.sub(".bwt$","",snakemake.input.ref)

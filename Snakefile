@@ -35,8 +35,10 @@ sample_tab = pd.DataFrame.from_dict(config["samples"],orient="index")
 
 if config["lib_reverse_read_length"] == 0:
     read_pair_tags = [""]
+    paired = "SE"
 else:
     read_pair_tags = ["_R1","_R2"]
+    paired = "PE"
 
 wildcard_constraints:
     sample = "|".join(sample_tab.sample_name),

@@ -71,6 +71,7 @@ def alignment_DNA_input(wildcards):
     else:
         return [os.path.join(preprocessed,"{sample}_R1.fastq.gz"),os.path.join(preprocessed,"{sample}_R2.fastq.gz")]
 
+
 rule alignment_DNA:
     input:
         fastqs = alignment_DNA_input,
@@ -83,3 +84,22 @@ rule alignment_DNA:
     threads: 40
     conda: "../wrappers/alignment_DNA/env.yaml"
     script: "../wrappers/alignment_DNA/script.py"
+
+
+def trim_adapters_input(wildcards):
+    if config["trim_adapters"]:
+        if read_pair_tags == [""]:
+            return "raw_fastq/{sample}.fastq.gz"
+        else:
+            return ["raw_fastq/{sample}_R1.fastq.gz","raw_fastq/{sample}_R2.fastq.gz"]
+
+
+rule trim_adapters:
+    input: trim_adapters_input,
+    output: fastq = expand("cleaned_fastq/{{sample}}{read_pair_tag}.fastq.gz",read_pair_tags = read_pair_tags),
+    log: "logs/{sample}/trim_adapters.log"
+    params: paired = paired,
+            outdir = "cleaned_fastq",
+    threads: 8
+    conda: "../wrappers/trim_adapters/env.yaml"
+    script: "../wrappers/trim_adapters/script.py"

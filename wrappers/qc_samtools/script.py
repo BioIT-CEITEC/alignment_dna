@@ -10,11 +10,9 @@ f = open(log_filename, 'wt')
 f.write("\n##\n## RULE: qc_samtools \n##\n")
 f.close()
 
-shell.executable("/bin/bash")
-
-version = str(subprocess.Popen("samtools --version 2>&1 | grep samtools", shell=True, stdout=subprocess.PIPE).communicate()[0], 'utf-8')
+version = str(subprocess.Popen("conda list ", shell=True, stdout=subprocess.PIPE).communicate()[0], 'utf-8')
 f = open(log_filename, 'at')
-f.write("## VERSION: "+version+"\n")
+f.write("## CONDA: "+version+"\n")
 f.close()
 
 command = "samtools idxstats "+snakemake.input.bam+" > "+snakemake.output.idxstats+" 2>> "+log_filename+" "

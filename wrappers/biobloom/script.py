@@ -14,9 +14,9 @@ f.close()
 #Minimum aligned reads to run Biobloom (%):
 if something:
 
-    version = str(subprocess.Popen(snakemake.params.tool+" --version 2>&1 | head -1", shell=True, stdout=subprocess.PIPE).communicate()[0], 'utf-8')
+    version = str(subprocess.Popen("conda list ", shell=True, stdout=subprocess.PIPE).communicate()[0], 'utf-8')
     f = open(log_filename, 'at')
-    f.write("## VERSION: "+version+"\n")
+    f.write("## CONDA: " + version + "\n")
     f.close()
 
     # set up contamination filters

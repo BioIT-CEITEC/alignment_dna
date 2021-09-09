@@ -11,17 +11,15 @@ f = open(log_filename, 'a+')
 f.write("\n##\n## RULE: mark_duplicates \n##\n")
 f.close()
 
-shell.executable("/bin/bash")
+version = str(subprocess.Popen("conda list ", shell=True, stdout=subprocess.PIPE).communicate()[0], 'utf-8')
+f = open(log_filename, 'at')
+f.write("## CONDA: "+version+"\n")
+f.close()
 
 if snakemake.params.mark_duplicates == True:
     os.makedirs(os.path.dirname(snakemake.params.mtx),exist_ok=True)
 
     if snakemake.params.UMI == "no_umi" or snakemake.params.umi_usage == "no":
-
-        f = open(log_filename, 'at')
-        version = str(subprocess.Popen("picard MarkDuplicates --version 2>&1",shell=True,stdout=subprocess.PIPE).communicate()[0], 'utf-8')
-        f.write("## VERSION: Picard "+version+"\n")
-        f.close()
 
         command = "picard MarkDuplicates INPUT="+snakemake.input.bam+" OUTPUT="+snakemake.output.bam+" METRICS_FILE="+snakemake.params.mtx+" REMOVE_DUPLICATES="+str(snakemake.params.rmDup)+ " \
             ASSUME_SORTED=true PROGRAM_RECORD_ID=null VALIDATION_STRINGENCY=LENIENT -Xmx" +str(snakemake.resources.mem)+"g 2>> "+log_filename+" "
@@ -39,10 +37,7 @@ if snakemake.params.mark_duplicates == True:
     else:
 
         if snakemake.params.umi_usage == "mark_duplicates":
-            version = str(subprocess.Popen("je markdupes --version 2>&1 | tail -n 1", shell=True, stdout=subprocess.PIPE).communicate()[0], 'utf-8')
-            f = open(log_filename, 'at')
-            f.write("## VERSION: je-suite "+version+"\n")
-            f.close()
+
             java_opts = "export _JAVA_OPTIONS='-Xmx"+str(snakemake.resources.mem)+"g'"
 
             command = java_opts + "&& je markdupes " + \
@@ -69,10 +64,6 @@ if snakemake.params.mark_duplicates == True:
             shell(command)
 
         else:
-            version = str(subprocess.Popen("gencore --version 2>&1", shell=True,stdout=subprocess.PIPE).communicate()[0], 'utf-8')
-            f = open(log_filename, 'at')
-            f.write("## VERSION: gencore "+version+"\n")
-            f.close()
 
             command ="gencore -i "+snakemake.input.bam+" -o "+snakemake.output.bam+" --ref "+str(snakemake.input.fa)+" --bed "+str(snakemake.input.lib_ROI)+" --supporting_reads "+str(snakemake.params.umi_consensus_min_support)+\
                      " --html "+snakemake.params.report_path+"umi_concensus.html"+\
