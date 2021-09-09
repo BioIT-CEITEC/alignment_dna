@@ -69,7 +69,7 @@
       "trim_adapters": {
         "label": "Trim adapters",
         "type": "bool",
-        "default": false
+        "default": true
       },
       "mark_duplicates": {
         "label": "Mark duplicates",
@@ -79,7 +79,7 @@
       "trim_quality": {
         "label": "Trim quality",
         "type": "bool",
-        "default": false
+        "default": true
       },
       "remove_duplicates": {
         "label": "Remove duplicates",
