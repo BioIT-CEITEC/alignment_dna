@@ -17,10 +17,30 @@ f.close()
 
 if snakemake.params.paired == "PE":
         paired_flag = " --paired"
+        r1 = snakemake.output[0]
+        r2 = snakemake.output[1]
 else:
         paired_flag = ""
+        r1 = snakemake.output[0]
 
-command = "trim_galore --fastqc " + paired_flag + " --basename "+ snakemake.input + " " + snakemake.input +" -o "+snakemake.params.outdir+ " 2>> "+log_filename
+command = "trim_galore --fastqc " + paired_flag + " " + str(snakemake.input) +" -o "+snakemake.params.outdir+ " 2>> "+log_filename
 with open(log_filename, 'at') as f:
         f.write("## COMMAND: " + command + "\n")
 shell(command)
+
+
+if snakemake.params.paired == "PE":
+        command = "mv " + r1.replace(".fastq.gz","_val_1.fq.gz") + " " + r1 + " 2>> "+log_filename
+        with open(log_filename, 'at') as f:
+                f.write("## COMMAND: " + command + "\n")
+        shell(command)
+
+        command = "mv " + r2.replace(".fastq.gz","_val_2.fq.gz") + " " + r2 + " 2>> "+log_filename
+        with open(log_filename, 'at') as f:
+                f.write("## COMMAND: " + command + "\n")
+        shell(command)
+else:
+        command = "mv " + r1.replace(".fastq.gz","_trimmed.fq.gz") + " " + r1 + " 2>> "+log_filename
+        with open(log_filename, 'at') as f:
+                f.write("## COMMAND: " + command + "\n")
+        shell(command)
