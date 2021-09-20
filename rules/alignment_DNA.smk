@@ -57,7 +57,7 @@ rule mark_duplicates:
         umi_usage=config["umi_usage"],
         keep_not_markDups_bam=config["keep_not_markDups_bam"],
         umi_consensus_min_support=config["umi_consensus_min_support"],
-        report_path="qc_reports/{sample}/MarkDuplicates/"
+        report_path=fetch_data("qc_reports/{sample}/MarkDuplicates/")
     conda: "../wrappers/mark_duplicates/env.yaml"
     script: "../wrappers/mark_duplicates/script.py"
 

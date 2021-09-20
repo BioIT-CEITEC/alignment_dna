@@ -113,6 +113,16 @@
             }
           }
         }
+      },
+      "feature_count": {
+        "label": "Feature count",
+        "type": "bool",
+        "default": true
+      },
+      "RSEM": {
+        "label": "Gene count RSEM",
+        "type": "bool",
+        "default": false
       }
     }
   }

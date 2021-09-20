@@ -7,7 +7,6 @@ min_version("5.18.0")
 
 GLOBAL_REF_PATH = "/mnt/references/"
 
-
 def fetch_data(file_path):
     if config["computing_type"] == "kubernetes":
         if isinstance(file_path, list) and len(file_path) == 1:
@@ -20,12 +19,8 @@ def fetch_data(file_path):
         else:
             return file_path
 
-
-
-
 # Reference processing
 #
-
 if config["lib_ROI"] != "wgs":
     # setting reference from lib_ROI
     f = open(os.path.join(GLOBAL_REF_PATH,"reference_info","lib_ROI.json"))
