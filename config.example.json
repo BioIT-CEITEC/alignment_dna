@@ -13,6 +13,7 @@
   "keep_not_markDups_bam":false,
   "umi_usage": "umi_concensus",
   "umi_consensus_min_support":1,
+  "computing_type": "local",
   "samples":{
     "id4":{
       "sample_name":"H-0246"},
