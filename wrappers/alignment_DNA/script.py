@@ -18,6 +18,7 @@ f.close()
 
 bwa_ref_prefix = re.sub(".bwt$","",snakemake.input.ref)
 
+
 command = "bwa mem -t "+str(snakemake.threads)+\
         " -R '@RG\\tID:"+snakemake.params.lib_name+"_"+snakemake.wildcards.sample+"\\tSM:"+snakemake.wildcards.sample+"\\tPL:illumina' -v 1 " +\
         bwa_ref_prefix + " " + " ".join(snakemake.input.fastqs) + " 2>> " + log_filename + " | " +\
