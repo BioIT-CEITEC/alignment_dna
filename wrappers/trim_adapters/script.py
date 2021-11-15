@@ -39,8 +39,27 @@ if snakemake.params.paired == "PE":
         with open(log_filename, 'at') as f:
                 f.write("## COMMAND: " + command + "\n")
         shell(command)
+
+        # report for multiQC
+        command = "cp " + r1+"_trimming_report.txt" + " " + snakemake.output.trim_stats[0] + " 2>> "+log_filename
+        with open(log_filename, 'at') as f:
+                f.write("## COMMAND: " + command + "\n")
+        shell(command)
+
+        command = "cp " + r2+"_trimming_report.txt" + " " + snakemake.output.trim_stats[1] + " 2>> "+log_filename
+        with open(log_filename, 'at') as f:
+                f.write("## COMMAND: " + command + "\n")
+        shell(command)
 else:
         command = "mv " + r1.replace(".fastq.gz","_trimmed.fq.gz") + " " + r1 + " 2>> "+log_filename
         with open(log_filename, 'at') as f:
                 f.write("## COMMAND: " + command + "\n")
         shell(command)
+
+
+        # report for multiQC
+        command = "cp " + r1+"_trimming_report.txt" + " " + snakemake.output.trim_stats + " 2>> "+log_filename
+        with open(log_filename, 'at') as f:
+                f.write("## COMMAND: " + command + "\n")
+        shell(command)
+
