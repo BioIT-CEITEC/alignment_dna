@@ -98,6 +98,7 @@ def trim_adapters_input(wildcards):
 rule trim_adapters:
     input: trim_adapters_input,
     output: fastq = expand("cleaned_fastq/{{sample}}{read_pair_tag}.fastq.gz",read_pair_tag = read_pair_tags),
+            trim_stats = expand("qc_reports/{{sample}}/trim_galore/trim_stats{read_pair_tag}.log",read_pair_tag=read_pair_tags)
     log: "logs/{sample}/trim_adapters.log"
     params: paired = paired,
             outdir = "cleaned_fastq",
