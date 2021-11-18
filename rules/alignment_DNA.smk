@@ -63,7 +63,7 @@ rule mark_duplicates:
 
 
 def alignment_DNA_input(wildcards):
-    if config["trim_adapters"] == True or config["trim_quality"] == True:
+    if config["trim_adapters"]:
         preprocessed = "cleaned_fastq"
     else:
         preprocessed = "raw_fastq"
