@@ -2,7 +2,7 @@
   "workflow_description": {
     "name": "alignment_DNA",
     "version": 1.0,
-    "label": "Alignment DNAT",
+    "label": "Alignment DNA",
     "type": "alignment_dna",
     "inputs": "*/{sample}*fastq.gz",
     "outputs": [
@@ -75,11 +75,6 @@
       },
       "mark_duplicates": {
         "label": "Mark duplicates",
-        "type": "bool",
-        "default": true
-      },
-      "trim_quality": {
-        "label": "Trim quality",
         "type": "bool",
         "default": true
       },
