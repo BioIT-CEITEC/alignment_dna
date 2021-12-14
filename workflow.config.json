@@ -18,11 +18,10 @@
   },
   "general_params": [
     "entity_name",
-    "sample_name",
-    "lib_forward_read_length",
-    "lib_reverse_read_length"
+    "sample_name"
   ],
   "requested_params": [
+    "is_paired",
     "UMI"
   ],
   "gui_params": {
@@ -55,7 +54,7 @@
       "reference": {
         "label": "Genomic Reference",
         "type": "enum",
-        "default": "GRCh38-p10",
+        "default": ##INCLUDE:reference_info/default_reference.json##,
         "conditions": {
           "relevance": {
             "operand": "equal",
@@ -76,11 +75,6 @@
       },
       "mark_duplicates": {
         "label": "Mark duplicates",
-        "type": "bool",
-        "default": true
-      },
-      "trim_quality": {
-        "label": "Trim quality",
         "type": "bool",
         "default": true
       },
@@ -107,16 +101,6 @@
             }
           }
         }
-      },
-      "feature_count": {
-        "label": "Feature count",
-        "type": "bool",
-        "default": false
-      },
-      "RSEM": {
-        "label": "Gene count RSEM",
-        "type": "bool",
-        "default": false
       }
     }
   }

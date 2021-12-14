@@ -63,7 +63,7 @@ rule mark_duplicates:
 
 
 def alignment_DNA_input(wildcards):
-    if config["trim_adapters"] == True or config["trim_quality"] == True:
+    if config["trim_adapters"]:
         preprocessed = "cleaned_fastq"
     else:
         preprocessed = "raw_fastq"
@@ -81,7 +81,7 @@ rule alignment_DNA:
         bam = "mapped/{sample}.not_markDups.bam",
         bai = "mapped/{sample}.not_markDups.bam.bai"
     log: "logs/{sample}/alignment_DNA.log"
-    params: lib_name=config["library_name"]
+    params: entity_name=config["entity_name"]
     threads: 40
     conda: "../wrappers/alignment_DNA/env.yaml"
     script: "../wrappers/alignment_DNA/script.py"
