@@ -15,6 +15,9 @@ rule alignment_DNA_multiqc:
             idxstats = expand("qc_reports/{sample}/qc_samtools/{sample}.idxstats.tsv",sample = sample_tab.sample_name),
     output: html= "qc_reports/all_samples/alignment_DNA_multiqc/multiqc.html"
     log: "logs/all_samples/alignment_DNA_multiqc.log"
+    params:
+        trim_adapters=config["trim_adapters"],
+        mark_duplicates=config["mark_duplicates"]
     conda: "../wrappers/alignment_DNA_multiqc/env.yaml"
     script: "../wrappers/alignment_DNA_multiqc/script.py"
 
