@@ -1,23 +1,12 @@
-# ####################################
-# # REFERENCE INFO PREPARATION
-# #
-#
-# rule ref_info_copy:
-#     input:  expand("{ref_dir}/info.txt", zip , ref_dir=reference_directory)[0],
-#     output: "genomic_reference_info.txt",
-#     run:
-#         shell(" cp {input} {output} ")
-
 
 
 rule alignment_DNA_multiqc:
     input:  bam = expand("mapped/{sample}.bam",sample = sample_tab.sample_name),
             idxstats = expand("qc_reports/{sample}/qc_samtools/{sample}.idxstats.tsv",sample = sample_tab.sample_name),
     output: html= "qc_reports/all_samples/alignment_DNA_multiqc/multiqc.html"
-    log: "logs/all_samples/alignment_DNA_multiqc.log"
-    params:
-        trim_adapters=config["trim_adapters"],
-        mark_duplicates=config["mark_duplicates"]
+    log:    "logs/all_samples/alignment_DNA_multiqc.log"
+    params: trim_adapters=config["trim_adapters"],
+            mark_duplicates=config["mark_duplicates"]
     conda: "../wrappers/alignment_DNA_multiqc/env.yaml"
     script: "../wrappers/alignment_DNA_multiqc/script.py"
 
@@ -45,22 +34,20 @@ def mark_duplicates_ref(wildcards):
 
 
 rule mark_duplicates:
-    input: unpack(mark_duplicates_ref)
-    output:
-        bam = "mapped/{sample}.bam",
-        bai = "mapped/{sample}.bam.bai"
-    log: "logs/{sample}/mark_duplicates.log"
+    input:  unpack(mark_duplicates_ref)
+    output: bam = "mapped/{sample}.bam",
+            bai = "mapped/{sample}.bam.bai"
+    log:    "logs/{sample}/mark_duplicates.log"
     threads: 8
     resources: mem=10
-    params:
-        mtx= "qc_reports/{sample}/MarkDuplicates/{sample}.markDups_metrics.txt",
-        mark_duplicates=config["mark_duplicates"],
-        rmDup=config["remove_duplicates"],# allow possibility for rm duplicates true
-        UMI=config["UMI"],
-        umi_usage=config["umi_usage"],
-        keep_not_markDups_bam=config["keep_not_markDups_bam"],
-        umi_consensus_min_support=config["umi_consensus_min_support"],
-        report_path="qc_reports/{sample}/MarkDuplicates/"
+    params: mtx= "qc_reports/{sample}/MarkDuplicates/{sample}.markDups_metrics.txt",
+            mark_duplicates=config["mark_duplicates"],
+            rmDup=config["remove_duplicates"],# allow possibility for rm duplicates true
+            UMI=config["UMI"],
+            umi_usage=config["umi_usage"],
+            keep_not_markDups_bam=config["keep_not_markDups_bam"],
+            umi_consensus_min_support=config["umi_consensus_min_support"],
+            report_path="qc_reports/{sample}/MarkDuplicates/"
     conda: "../wrappers/mark_duplicates/env.yaml"
     script: "../wrappers/mark_duplicates/script.py"
 
@@ -77,13 +64,11 @@ def alignment_DNA_input(wildcards):
 
 
 rule alignment_DNA:
-    input:
-        fastqs = alignment_DNA_input,
-        ref = expand("{ref_dir}/index/BWA/{ref}.bwt",ref_dir=reference_directory,ref = config["reference"])[0],
-    output:
-        bam = "mapped/{sample}.not_markDups.bam",
-        bai = "mapped/{sample}.not_markDups.bam.bai"
-    log: "logs/{sample}/alignment_DNA.log"
+    input:  fastqs = alignment_DNA_input,
+            ref = expand("{ref_dir}/index/BWA/{ref}.bwt",ref_dir=reference_directory,ref = config["reference"])[0],
+    output: bam = "mapped/{sample}.not_markDups.bam",
+            bai = "mapped/{sample}.not_markDups.bam.bai"
+    log:    "logs/{sample}/alignment_DNA.log"
     params: entity_name=config["entity_name"]
     threads: 40
     conda: "../wrappers/alignment_DNA/env.yaml"
@@ -99,10 +84,10 @@ def trim_adapters_input(wildcards):
 
 
 rule trim_adapters:
-    input: trim_adapters_input,
+    input:  trim_adapters_input,
     output: fastq = expand("cleaned_fastq/{{sample}}{read_pair_tag}.fastq.gz",read_pair_tag = read_pair_tags),
             trim_stats = expand("qc_reports/{{sample}}/trim_galore/trim_stats{read_pair_tag}.log",read_pair_tag=read_pair_tags)
-    log: "logs/{sample}/trim_adapters.log"
+    log:    "logs/{sample}/trim_adapters.log"
     params: paired = paired,
             outdir = "cleaned_fastq",
     threads: 8
