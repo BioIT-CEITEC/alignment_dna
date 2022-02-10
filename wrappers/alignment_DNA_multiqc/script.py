@@ -21,7 +21,7 @@ if snakemake.params.trim_adapters:
     multiqc_search_paths = multiqc_search_paths + " ./qc_reports/*/trim_galore/*"
 if snakemake.params.mark_duplicates:
     multiqc_search_paths = multiqc_search_paths + " ./qc_reports/*/MarkDuplicates/*"
-# if config["qc_samtools"]:
+
 multiqc_search_paths = multiqc_search_paths + " ./qc_reports/*/qc_samtools/*"
 
 command = "multiqc -f -n " + snakemake.output.html + " " + multiqc_search_paths + \
@@ -30,4 +30,3 @@ f = open(log_filename, 'at')
 f.write("## COMMAND: "+command+"\n")
 f.close()
 shell(command)
-

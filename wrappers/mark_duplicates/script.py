@@ -34,9 +34,6 @@ if snakemake.params.mark_duplicates == True:
         f.close()
         shell(command)
 
-        # "MarkDuplicates -INPUT "+snakemake.input.bam+" -OUTPUT "+snakemake.output.bam+" -METRICS_FILE "+snakemake.params.mtx+"  -REMOVE_DUPLICATES "+str(snakemake.params.rmDup)+ " \
-        #  -ASSUME_SORTED true -PROGRAM_RECORD_ID null -VALIDATION_STRINGENCY LENIENT -Xmx" +str(snakemake.resources.mem)+"g 2>> "+log_filename+" "
-
     else:
 
         if snakemake.params.umi_usage == "mark_duplicates":
