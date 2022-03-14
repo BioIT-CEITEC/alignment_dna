@@ -58,7 +58,7 @@ else:
         shell(command)
 
         # report for multiQC
-        command = "cp " + r1+"_trimming_report.txt" + " " + snakemake.output.trim_stats + " 2>> "+log_filename
+        command = "cp " + r1+"_trimming_report.txt" + " " + snakemake.output.trim_stats[0] + " 2>> "+log_filename
         with open(log_filename, 'at') as f:
                 f.write("## COMMAND: " + command + "\n")
         shell(command)
