@@ -4,8 +4,6 @@ min_version("7.2.1")
 
 configfile: "config.json"
 
-GLOBAL_REF_PATH = "/mnt/references/"
-
 module BR:
     snakefile: gitlab("bioroots/bioroots_utilities", path="bioroots_utilities.smk",branch="main")
     config: config
