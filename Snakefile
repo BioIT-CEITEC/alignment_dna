@@ -1,56 +1,43 @@
-import os
-import pandas as pd
-import json
 from snakemake.utils import min_version
 
-min_version("5.18.0")
+min_version("7.2.1")
+
 configfile: "config.json"
 
 GLOBAL_REF_PATH = "/mnt/references/"
 
+module BR:
+    snakefile: gitlab("bioroots/bioroots_utilities", path="bioroots_utilities.smk",branch="main")
+    config: config
 
-# Reference processing
-#
-if config["lib_ROI"] != "wgs":
-    # setting reference from lib_ROI
-    f = open(os.path.join(GLOBAL_REF_PATH,"reference_info","lib_ROI.json"))
-    lib_ROI_dict = json.load(f)
-    f.close()
-    config["reference"] = [ref_name for ref_name in lib_ROI_dict.keys() if isinstance(lib_ROI_dict[ref_name],dict) and config["lib_ROI"] in lib_ROI_dict[ref_name].keys()][0]
-
-# setting organism from reference
-f = open(os.path.join(GLOBAL_REF_PATH,"reference_info","reference.json"),)
-reference_dict = json.load(f)
-f.close()
-config["organism"] = [organism_name.lower().replace(" ","_") for organism_name in reference_dict.keys() if isinstance(reference_dict[organism_name],dict) and config["reference"] in reference_dict[organism_name].keys()][0]
-
+use rule * from BR as other_*
 
 ##### Config processing #####
-# Folders
 #
-reference_directory = os.path.join(GLOBAL_REF_PATH,config["organism"],config["reference"])
+GLOBAL_REF_PATH = config["globalResources"]
+sample_tab = BR.load_sample()
+read_pair_tags = BR.set_read_pair_tags()[0]
+paired = BR.set_read_pair_tags()[1] # nahradit if not "is_paired in config:
 
-# Samples
+##### Reference processing #####
 #
-sample_tab = pd.DataFrame.from_dict(config["samples"],orient="index")
+print(config)
+BR.load_ref()
+print(config)
+BR.load_organism()
+print(config)
 
-if not config["is_paired"]:
-    read_pair_tags = [""]
-    paired = "SE"
-else:
-    read_pair_tags = ["_R1","_R2"]
-    paired = "PE"
+reference_directory = BR.reference_directory()
 
 wildcard_constraints:
     sample = "|".join(sample_tab.sample_name),
     read_pair_tag = "(_R.)?"
 
-
 ##### Target rules #####
 rule all:
-    input:  expand("mapped/{sample}.bam",sample = sample_tab.sample_name),
-            expand("mapped/{sample}.bam.bai", sample = sample_tab.sample_name),
-            "qc_reports/all_samples/alignment_DNA_multiqc/multiqc.html"
+    input:  BR.remote(expand("mapped/{sample}.bam",sample = sample_tab.sample_name)),
+            BR.remote(expand("mapped/{sample}.bam.bai", sample = sample_tab.sample_name)),
+            BR.remote("qc_reports/all_samples/alignment_DNA_multiqc/multiqc.html")
 
 ##### Modules #####
 
