@@ -2,7 +2,7 @@ from snakemake.utils import min_version
 import json
 import os
 
-min_version("7.2.1")
+# min_version("7.2.1")
 
 # configfile: "config.json"
 #
@@ -61,12 +61,24 @@ min_version("7.2.1")
 #             BR.remote(expand("mapped/{sample}.bam.bai", sample = sample_tab.sample_name)),
             #BR.remote("qc_reports/all_samples/alignment_DNA_multiqc/multiqc.html")
 
+# rule all:
+#     input: "text.txt",
+#            "text2.txt"
+#     # output: BR.remote("text.txt")
+#     # shell:"touch {output}"
+#
+# ##### Modules #####
+#
+# include: "rules/alignment_DNA.smk"
+
+from snakemake.remote.S3 import RemoteProvider as S3RemoteProvider
+
+S3 = S3RemoteProvider(host="https://storage-elixir1.cerit-sc.cz",access_key_id="acgt",secret_access_key="P84RsiL5TmHu0Ijd")
+
 rule all:
-    input: "text.txt",
-           "text2.txt"
-    # output: BR.remote("text.txt")
-    # shell:"touch {output}"
+    input: "text.txt"
 
-##### Modules #####
+rule a:
+    output: S3.remote("acgt/sequia/211007__alignment_dna__MOII_e91_krve__991/"+"text.txt")
+    shell: "touch {output}"
 
-include: "rules/alignment_DNA.smk"

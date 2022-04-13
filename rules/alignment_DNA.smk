@@ -96,12 +96,3 @@
 #     conda: "../wrappers/trim_adapters/env.yaml"
 #     script: "../wrappers/trim_adapters/script.py"
 
-
-
-rule a:
-    output: "text.txt"
-    shell: "touch {output}"
-
-rule b:
-    output: "text2.txt"
-    shell: "touch {output}"
