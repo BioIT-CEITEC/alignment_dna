@@ -16,8 +16,7 @@ f = open(log_filename, 'at')
 f.write("## CONDA: "+version+"\n")
 f.close()
 
-bwa_ref_prefix = re.sub(".bwt$","",snakemake.input.ref)
-
+bwa_ref_prefix = snakemake.input.ref[0].split('.')[0]
 
 command = "bwa mem -t "+str(snakemake.threads)+\
         " -R '@RG\\tID:"+snakemake.params.entity_name+"_"+snakemake.wildcards.sample+"\\tSM:"+snakemake.wildcards.sample+"\\tPL:illumina' -v 1 " +\

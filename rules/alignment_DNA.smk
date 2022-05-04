@@ -1,58 +1,65 @@
-#
-#
-# rule alignment_DNA_multiqc:
-#     input:  bam = BR.remote(expand("mapped/{sample}.bam",sample = sample_tab.sample_name)),
-#             idxstats = BR.remote(expand("qc_reports/{sample}/qc_samtools/{sample}.idxstats.tsv",sample = sample_tab.sample_name)),
-#     output: html= BR.remote("qc_reports/all_samples/alignment_DNA_multiqc/multiqc.html")
-#     log:    BR.remote("logs/all_samples/alignment_DNA_multiqc.log")
-#     params: trim_adapters=config["trim_adapters"],
-#             mark_duplicates=config["mark_duplicates"]
-#     conda: "../wrappers/alignment_DNA_multiqc/env.yaml"
-#     script: "../wrappers/alignment_DNA_multiqc/script.py"
-#
-#
-# rule qc_samtools:
-#     input:  bam = BR.remote("mapped/{sample}.bam")
-#     output: idxstats = BR.remote("qc_reports/{sample}/qc_samtools/{sample}.idxstats.tsv"),
-#             flagstats = BR.remote("qc_reports/{sample}/qc_samtools/{sample}.flagstat.tsv"),
-#     log:    BR.remote("logs/{sample}/qc_samtools.log")
-#     threads:    1
-#     conda: "../wrappers/qc_samtools/env.yaml"
-#     script: "../wrappers/qc_samtools/script.py"
-#
-#
-# def mark_duplicates_ref(wildcards):
-#     input = {
-#         'bam': BR.remote("mapped/{sample}.not_markDups.bam"),
-#         'bai': BR.remote("mapped/{sample}.not_markDups.bam.bai"),
-#     }
-#     if config["umi_usage"] == "umi_concensus":
-#         input['ref'] = BR.remote_ref(expand("{ref_dir}/tool_data/BWA/{ref}.{end}",ref_dir=reference_directory,ref=config["reference"],end=["amb", "ann", "bwt", "pac","sa"])),
-#         input['lib_ROI'] = BR.remote_ref(expand("{ref_dir}/DNA_panel/{lib_ROI}/{lib_ROI}.bed",ref_dir=reference_directory,lib_ROI=config["lib_ROI"])),
-#         input['fa'] = BR.remote_ref(expand("{ref_dir}/seq/{ref}.fa",ref_dir=reference_directory,ref=config["reference"])),
-#     return input
-#
-#
-#
-# rule mark_duplicates:
-#     input:  unpack(mark_duplicates_ref)
-#     output: bam = BR.remote("mapped/{sample}.bam"),
-#             bai = BR.remote("mapped/{sample}.bam.bai")
-#     log:    BR.remote("logs/{sample}/mark_duplicates.log")
-#     threads: 8
-#     resources: mem=10
-#     params: mtx= BR.remote("qc_reports/{sample}/MarkDuplicates/{sample}.markDups_metrics.txt"),
-#             mark_duplicates=config["mark_duplicates"],
-#             rmDup=config["remove_duplicates"],# allow possibility for rm duplicates true
-#             UMI=config["UMI"],
-#             umi_usage=config["umi_usage"],
-#             keep_not_markDups_bam=config["keep_not_markDups_bam"],
-#             umi_consensus_min_support=config["umi_consensus_min_support"],
-#             report_path=BR.remote("qc_reports/{sample}/MarkDuplicates/")
-#     conda: "../wrappers/mark_duplicates/env.yaml"
-#     script: "../wrappers/mark_duplicates/script.py"
-#
-#
+
+
+def alignment_DNA_multiqc_input(wildcards):
+    input = {
+        "bam": BR.remote(expand("mapped/{sample}.bam",sample=sample_tab.sample_name)),
+        "samtools": BR.remote(expand("qc_reports/{sample}/qc_samtools/{sample}.{stat}.tsv",sample=sample_tab.sample_name,stat=["flagstat", "idxstats"])),
+    }
+    if config["trim_adapters"]:
+        input["trim_galore"] = BR.remote(expand("qc_reports/{sample}/trim_galore/trim_stats{read_pair_tag}.log",sample=sample_tab.sample_name,read_pair_tag=read_pair_tags))
+    if config["mark_duplicates"]:
+        input["mark_duplicates"] = BR.remote(expand("qc_reports/{sample}/MarkDuplicates/{sample}.markDups_metrics.txt",sample=sample_tab.sample_name))
+    return input
+
+rule alignment_DNA_multiqc:
+    input: unpack(alignment_DNA_multiqc_input)
+    output: html=BR.remote("qc_reports/all_samples/alignment_DNA_multiqc/multiqc.html")
+    log: BR.remote("logs/all_samples/alignment_DNA_multiqc.log")
+    params: trim_adapters=config["trim_adapters"],
+            mark_duplicates=config["mark_duplicates"]
+    conda: "../wrappers/alignment_DNA_multiqc/env.yaml"
+    script: "../wrappers/alignment_DNA_multiqc/script.py"
+
+
+rule qc_samtools:
+    input:  bam = BR.remote("mapped/{sample}.bam")
+    output: idxstats = BR.remote("qc_reports/{sample}/qc_samtools/{sample}.idxstats.tsv"),
+            flagstats = BR.remote("qc_reports/{sample}/qc_samtools/{sample}.flagstat.tsv"),
+    log:    BR.remote("logs/{sample}/qc_samtools.log")
+    threads:    1
+    conda: "../wrappers/qc_samtools/env.yaml"
+    script: "../wrappers/qc_samtools/script.py"
+
+
+def mark_duplicates_ref(wildcards):
+    input = {
+        'bam': BR.remote("mapped/{sample}.not_markDups.bam"),
+        'bai': BR.remote("mapped/{sample}.not_markDups.bam.bai"),
+    }
+    if config["umi_usage"] == "umi_concensus":
+        input['ref'] = BR.remote(expand("{ref_dir}/tool_data/BWA/{ref}.{end}",ref_dir=reference_directory,ref=config["reference"],end=["amb", "ann", "bwt", "pac","sa"])),
+        input['lib_ROI'] = BR.remote(expand("{ref_dir}/DNA_panel/{lib_ROI}/{lib_ROI}.bed",ref_dir=reference_directory,lib_ROI=config["lib_ROI"])),
+        input['fa'] = BR.remote(expand("{ref_dir}/seq/{ref}.fa",ref_dir=reference_directory,ref=config["reference"])),
+    return input
+
+rule mark_duplicates:
+    input:  unpack(mark_duplicates_ref)
+    output: bam = BR.remote("mapped/{sample}.bam"),
+            bai = BR.remote("mapped/{sample}.bam.bai")
+    log:    BR.remote("logs/{sample}/mark_duplicates.log")
+    threads: 8
+    resources: mem=10
+    params: mtx= BR.remote("qc_reports/{sample}/MarkDuplicates/{sample}.markDups_metrics.txt"),
+            mark_duplicates=config["mark_duplicates"],
+            rmDup=config["remove_duplicates"],# allow possibility for rm duplicates true
+            UMI=config["UMI"],
+            umi_usage=config["umi_usage"],
+            keep_not_markDups_bam=config["keep_not_markDups_bam"],
+            umi_consensus_min_support=config["umi_consensus_min_support"],
+            report_path=BR.remote("qc_reports/{sample}/MarkDuplicates/")
+    conda: "../wrappers/mark_duplicates/env.yaml"
+    script: "../wrappers/mark_duplicates/script.py"
+
 
 def alignment_DNA_input(wildcards):
     if config["trim_adapters"]:
@@ -63,7 +70,6 @@ def alignment_DNA_input(wildcards):
         return [BR.remote(os.path.join(preprocessed,"{sample}.fastq.gz"))]
     else:
         return [BR.remote(os.path.join(preprocessed,"{sample}_R1.fastq.gz")),BR.remote(os.path.join(preprocessed,"{sample}_R2.fastq.gz"))]
-
 
 rule alignment_DNA:
     input:  fastqs = alignment_DNA_input,
@@ -77,42 +83,22 @@ rule alignment_DNA:
     script: "../wrappers/alignment_DNA/script.py"
 
 
-# def trim_adapters_input(wildcards):
-#     if config["trim_adapters"]:
-#         if read_pair_tags == [""]:
-#             return BR.remote("raw_fastq/{sample}.fastq.gz")
-#         else:
-#             return [BR.remote("raw_fastq/{sample}_R1.fastq.gz"),BR.remote("raw_fastq/{sample}_R2.fastq.gz")]
-#
-#
-# rule trim_adapters:
-#     input:  trim_adapters_input,
-#     output: fastq = BR.remote(expand("cleaned_fastq/{{sample}}{read_pair_tag}.fastq.gz",read_pair_tag = read_pair_tags)),
-#             trim_stats = BR.remote(expand("qc_reports/{{sample}}/trim_galore/trim_stats{read_pair_tag}.log",read_pair_tag=read_pair_tags))
-#     log:    BR.remote("logs/{sample}/trim_adapters.log")
-#     params: paired = paired,
-#             outdir = BR.remote("cleaned_fastq"),
-#     threads: 8
-#     conda: "../wrappers/trim_adapters/env.yaml"
-#     script: "../wrappers/trim_adapters/script.py"
+def trim_adapters_input(wildcards):
+    if config["trim_adapters"]:
+        if read_pair_tags == [""]:
+            return BR.remote("raw_fastq/{sample}.fastq.gz")
+        else:
+            return [BR.remote("raw_fastq/{sample}_R1.fastq.gz"),BR.remote("raw_fastq/{sample}_R2.fastq.gz")]
 
+rule trim_adapters:
+    input:  trim_adapters_input,
+    output: fastq = BR.remote(expand("cleaned_fastq/{{sample}}{read_pair_tag}.fastq.gz",read_pair_tag = read_pair_tags)),
+            trim_stats = BR.remote(expand("qc_reports/{{sample}}/trim_galore/trim_stats{read_pair_tag}.log",read_pair_tag=read_pair_tags))
+    log:    BR.remote("logs/{sample}/trim_adapters.log")
+    params: paired = config["is_paired"],
+            outdir = BR.remote("cleaned_fastq"),
+    threads: 8
+    conda: "../wrappers/trim_adapters/env.yaml"
+    script: "../wrappers/trim_adapters/script.py"
 
-# def trim_adapters_input(wildcards):
-#     if config["trim_adapters"]:
-#         if read_pair_tags == [""]:
-#             return BR.remote(expand("{task_dir}/raw_fastq/{{sample}}.fastq.gz",task_dir = task_directory))
-#         else:
-#             return [BR.remote(expand("{task_dir}/raw_fastq/{{sample}}_R1.fastq.gz",task_dir = task_directory)),BR.remote(expand("{task_dir}/raw_fastq/{sample}_R2.fastq.gz",task_dir = task_directory))]
-#
-#
-# rule trim_adapters:
-#     input:  trim_adapters_input,
-#     output: fastq = BR.remote(expand("{task_dir}/cleaned_fastq/{{sample}}{read_pair_tag}.fastq.gz",task_dir = task_directory,read_pair_tag = read_pair_tags)),
-#             trim_stats = BR.remote(expand("{task_dir}/qc_reports/{{sample}}/trim_galore/trim_stats{read_pair_tag}.log",task_dir = task_directory,read_pair_tag=read_pair_tags))
-#     log:    BR.remote(expand("{task_dir}/logs/{{sample}}/trim_adapters.log",task_dir = task_directory))
-#     params: paired = paired,
-#             outdir = BR.remote(expand("{task_dir}/cleaned_fastq",task_dir = task_directory)),
-#     threads: 8
-#     conda: "../wrappers/trim_adapters/env.yaml"
-#     script: "../wrappers/trim_adapters/script.py"
 
