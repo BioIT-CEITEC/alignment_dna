@@ -45,18 +45,18 @@ def mark_duplicates_ref(wildcards):
 rule mark_duplicates:
     input:  unpack(mark_duplicates_ref)
     output: bam = BR.remote("mapped/{sample}.bam"),
-            bai = BR.remote("mapped/{sample}.bam.bai")
+            bai = BR.remote("mapped/{sample}.bam.bai"),
+            mtx= BR.remote("qc_reports/{sample}/MarkDuplicates/{sample}.markDups_metrics.txt")
     log:    BR.remote("logs/{sample}/mark_duplicates.log")
     threads: 8
     resources: mem=10
-    params: mtx= BR.remote("qc_reports/{sample}/MarkDuplicates/{sample}.markDups_metrics.txt"),
-            mark_duplicates=config["mark_duplicates"],
-            rmDup=config["remove_duplicates"],# allow possibility for rm duplicates true
+    params: mark_duplicates=config["mark_duplicates"],
+            rmDup=config["remove_duplicates"],
             UMI=config["UMI"],
             umi_usage=config["umi_usage"],
             keep_not_markDups_bam=config["keep_not_markDups_bam"],
             umi_consensus_min_support=config["umi_consensus_min_support"],
-            report_path=BR.remote("qc_reports/{sample}/MarkDuplicates/")
+            report_path="qc_reports/{sample}/MarkDuplicates/"
     conda: "../wrappers/mark_duplicates/env.yaml"
     script: "../wrappers/mark_duplicates/script.py"
 
@@ -69,7 +69,9 @@ def alignment_DNA_input(wildcards):
     if read_pair_tags == [""]:
         return [BR.remote(os.path.join(preprocessed,"{sample}.fastq.gz"))]
     else:
-        return [BR.remote(os.path.join(preprocessed,"{sample}_R1.fastq.gz")),BR.remote(os.path.join(preprocessed,"{sample}_R2.fastq.gz"))]
+        return [BR.remote(os.path.join(preprocessed,"{sample}_R1.fastq.gz")),
+                BR.remote(os.path.join(preprocessed,"{sample}_R2.fastq.gz"))]
+
 
 rule alignment_DNA:
     input:  fastqs = alignment_DNA_input,
@@ -84,19 +86,19 @@ rule alignment_DNA:
 
 
 def trim_adapters_input(wildcards):
-    if config["trim_adapters"]:
-        if read_pair_tags == [""]:
-            return BR.remote("raw_fastq/{sample}.fastq.gz")
-        else:
-            return [BR.remote("raw_fastq/{sample}_R1.fastq.gz"),BR.remote("raw_fastq/{sample}_R2.fastq.gz")]
+    if read_pair_tags == [""]:
+        return [BR.remote("raw_fastq/{sample}.fastq.gz")]
+    else:
+        return [BR.remote("raw_fastq/{sample}_R1.fastq.gz"),
+                BR.remote("raw_fastq/{sample}_R2.fastq.gz")]
 
 rule trim_adapters:
     input:  trim_adapters_input,
-    output: fastq = BR.remote(expand("cleaned_fastq/{{sample}}{read_pair_tag}.fastq.gz",read_pair_tag = read_pair_tags)),
-            trim_stats = BR.remote(expand("qc_reports/{{sample}}/trim_galore/trim_stats{read_pair_tag}.log",read_pair_tag=read_pair_tags))
+    output: fastq = BR.remote(expand("qc_reports/{{sample}}/trim_galore/trim_stats{read_pair_tag}.log",read_pair_tag=read_pair_tags)),
+            trim_stats = BR.remote(expand("cleaned_fastq/{{sample}}{read_pair_tag}.fastq.gz",read_pair_tag=read_pair_tags))
     log:    BR.remote("logs/{sample}/trim_adapters.log")
     params: paired = config["is_paired"],
-            outdir = BR.remote("cleaned_fastq"),
+            outdir = "cleaned_fastq",
     threads: 8
     conda: "../wrappers/trim_adapters/env.yaml"
     script: "../wrappers/trim_adapters/script.py"

@@ -15,7 +15,7 @@ f = open(log_filename, 'at')
 f.write("## CONDA: "+version+"\n")
 f.close()
 
-multiqc_search_paths = str(snakemake.input.bam) + " " + str(snakemake.input.samtools) + " " + str(snakemake.input.trim_galore) + " " + str(snakemake.input.mark_duplicates)
+multiqc_search_paths = " ".join(snakemake.input.bam) + " " + " ".join(snakemake.input.samtools) + " " + " ".join(snakemake.input.trim_galore) + " " + " ".join(snakemake.input.mark_duplicates)
 
 command = "multiqc -f -n " + snakemake.output.html + " " + multiqc_search_paths + \
               " --cl_config \"{{read_count_multiplier: 0.001, read_count_prefix: 'K', read_count_desc: 'thousands' }}\" >> "+log_filename+" 2>&1"

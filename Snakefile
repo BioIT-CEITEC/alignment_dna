@@ -32,9 +32,10 @@ wildcard_constraints:
     read_pair_tag = "(_R.)?"
 
 #### Target rules #####
+
 rule all:
-    input:  #BR.remote(expand("mapped/{sample}.bam",sample = sample_tab.sample_name)),
-            #BR.remote(expand("mapped/{sample}.bam.bai", sample = sample_tab.sample_name)),
+    input:  BR.remote(expand("mapped/{sample}.bam",sample = sample_tab.sample_name)),
+            BR.remote(expand("mapped/{sample}.bam.bai", sample = sample_tab.sample_name)),
             BR.remote("qc_reports/all_samples/alignment_DNA_multiqc/multiqc.html")
 
 #### Modules #####

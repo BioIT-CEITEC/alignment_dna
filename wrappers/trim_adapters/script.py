@@ -15,6 +15,7 @@ f = open(log_filename, 'at')
 f.write("## CONDA: "+version+"\n")
 f.close()
 
+
 if snakemake.params.paired:
         paired_flag = " --paired"
         r1 = snakemake.output[0]
@@ -23,7 +24,7 @@ else:
         paired_flag = ""
         r1 = snakemake.output[0]
 
-command = "trim_galore --fastqc " + paired_flag + " " + str(snakemake.input) +" -o "+snakemake.params.outdir+ " 2>> "+log_filename
+command = "trim_galore --fastqc " + paired_flag + " " + " ".join(snakemake.input) +" -o "+snakemake.params.outdir+ " 2>> "+log_filename
 with open(log_filename, 'at') as f:
         f.write("## COMMAND: " + command + "\n")
 shell(command)

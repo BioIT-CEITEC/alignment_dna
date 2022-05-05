@@ -17,11 +17,11 @@ f.write("## CONDA: "+version+"\n")
 f.close()
 
 if snakemake.params.mark_duplicates == True:
-    os.makedirs(os.path.dirname(snakemake.params.mtx),exist_ok=True)
+    os.makedirs(os.path.dirname(snakemake.output.mtx),exist_ok=True)
 
     if snakemake.params.UMI == "no_umi" or snakemake.params.umi_usage == "no":
 
-        command = "picard MarkDuplicates INPUT="+snakemake.input.bam+" OUTPUT="+snakemake.output.bam+" METRICS_FILE="+snakemake.params.mtx+" REMOVE_DUPLICATES="+str(snakemake.params.rmDup)+ " \
+        command = "picard MarkDuplicates INPUT="+snakemake.input.bam+" OUTPUT="+snakemake.output.bam+" METRICS_FILE="+snakemake.output.mtx+" REMOVE_DUPLICATES="+str(snakemake.params.rmDup)+ " \
             ASSUME_SORTED=true PROGRAM_RECORD_ID=null VALIDATION_STRINGENCY=LENIENT -Xmx" +str(snakemake.resources.mem)+"g 2>> "+log_filename+" "
         f = open(log_filename, 'at')
         f.write("## COMMAND: "+command+"\n")
@@ -43,7 +43,7 @@ if snakemake.params.mark_duplicates == True:
             command = java_opts + "&& je markdupes " + \
                       "INPUT=" + snakemake.input.bam +\
                       " OUTPUT="+snakemake.output.bam+\
-                      " METRICS_FILE="+snakemake.params.mtx+\
+                      " METRICS_FILE="+snakemake.output.mtx+\
                       " REMOVE_DUPLICATES="+str(snakemake.params.rmDup)+ \
                       " ASSUME_SORTED=true" + \
                       " PROGRAM_RECORD_ID=null"+ \
