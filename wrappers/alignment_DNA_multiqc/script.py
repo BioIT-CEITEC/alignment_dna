@@ -22,7 +22,7 @@ if snakemake.params.trim_adapters:
 if snakemake.params.mark_duplicates:
     multiqc_search_paths = multiqc_search_paths + " ./qc_reports/*/MarkDuplicates/*"
 
-multiqc_search_paths = multiqc_search_paths + " ./qc_reports/*/qc_samtools/*"
+multiqc_search_paths = multiqc_search_paths + " ./qc_reports/*/index_and_stats/*"
 
 command = "multiqc -f -n " + snakemake.output.html + " " + multiqc_search_paths + \
               " --cl_config \"{{read_count_multiplier: 0.001, read_count_prefix: 'K', read_count_desc: 'thousands' }}\" >> "+log_filename+" 2>&1"
