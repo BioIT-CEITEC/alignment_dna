@@ -24,7 +24,6 @@ read_pair_tags = BR.set_read_pair_tags()
 
 BR.load_ref()
 BR.load_organism()
-
 reference_directory = BR.reference_directory()
 
 wildcard_constraints:
@@ -38,8 +37,6 @@ rule all:
             BR.remote(expand("mapped/{sample}.bam.bai", sample = sample_tab.sample_name)),
             BR.remote("qc_reports/all_samples/alignment_DNA_multiqc/multiqc.html")
 
-#### Modules #####
+### Modules #####
 
 include: "rules/alignment_DNA.smk"
-
-

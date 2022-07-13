@@ -1,6 +1,7 @@
 ######################################
 # wrapper for rule: trim_adapters
 ######################################
+import os.path
 import subprocess
 from snakemake.shell import shell
 shell.executable("/bin/bash")
@@ -18,13 +19,13 @@ f.close()
 
 if snakemake.params.paired:
         paired_flag = " --paired"
-        r1 = snakemake.output[0]
-        r2 = snakemake.output[1]
+        r1 = snakemake.output.fastq[0]
+        r2 = snakemake.output.fastq[1]
 else:
         paired_flag = ""
-        r1 = snakemake.output[0]
+        r1 = snakemake.output.fastq[0]
 
-command = "trim_galore --fastqc " + paired_flag + " " + " ".join(snakemake.input) +" -o "+snakemake.params.outdir+ " 2>> "+log_filename
+command = "trim_galore --fastqc " + paired_flag + " " + " ".join(snakemake.input) + " -o " + os.path.dirname(r1) + " 2>> "+log_filename
 with open(log_filename, 'at') as f:
         f.write("## COMMAND: " + command + "\n")
 shell(command)

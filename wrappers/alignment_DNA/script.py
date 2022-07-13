@@ -1,7 +1,6 @@
 ######################################
 # wrapper for rule: alignment_DNA
 ######################################
-import re
 import subprocess
 from snakemake.shell import shell
 shell.executable("/bin/bash")
