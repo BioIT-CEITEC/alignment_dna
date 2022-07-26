@@ -11,48 +11,14 @@ rule alignment_DNA_multiqc:
     script: "../wrappers/alignment_DNA_multiqc/script.py"
 
 
-# rule index_and_stats:
-#     input:  bam = "mapped/{sample}.bam"
-#     output: idxstats = "qc_reports/{sample}/index_and_stats/{sample}.idxstats.tsv",
-#             flagstats = "qc_reports/{sample}/index_and_stats/{sample}.flagstat.tsv",
-#     log:    "logs/{sample}/index_and_stats.log"
-#     threads:    1
-#     conda: "../wrappers/index_and_stats/env.yaml"
-#     script: "../wrappers/index_and_stats/script.py"
-
-
-# def mark_duplicates_ref(wildcards):
-#     input = {
-#         'bam': "mapped/{sample}.not_markDups.bam",
-#         'bai': "mapped/{sample}.not_markDups.bam.bai",
-#     }
-#     if config["umi_usage"] == "umi_concensus":
-#         input['ref'] = expand("{ref_dir}/index/BWA/{ref}.bwt",ref_dir=reference_directory,ref=config["reference"])[0],
-#         input['lib_ROI'] = expand("{ref_dir}/intervals/{lib_ROI}/{lib_ROI}.bed",ref_dir=reference_directory,lib_ROI=config["lib_ROI"])[0],
-#         input['fa'] = expand("{ref_dir}/seq/{ref}.fa",ref_dir=reference_directory,ref=config["reference"])[0],
-#     return input
-#
-#
-# rule mark_duplicates:
-#     input:  unpack(mark_duplicates_ref)
-#     output: bam = "mapped/{sample}.bam",
-#             bai = "mapped/{sample}.bam.bai"
-#     log:    "logs/{sample}/mark_duplicates.log"
-#     threads: 8
-#     resources: mem=10
-#     params: mtx= "qc_reports/{sample}/MarkDuplicates/{sample}.markDups_metrics.txt",
-#             mark_duplicates=config["mark_duplicates"],
-#             rmDup=config["remove_duplicates"],# allow possibility for rm duplicates true
-#             UMI=config["UMI"],
-#             umi_usage=config["umi_usage"],
-#             keep_not_markDups_bam=config["keep_not_markDups_bam"],
-#             umi_consensus_min_support=config["umi_consensus_min_support"],
-#             report_path="qc_reports/{sample}/MarkDuplicates/"
-#     conda: "../wrappers/mark_duplicates/env.yaml"
-#     script: "../wrappers/mark_duplicates/script.py"
+def index_and_stats_input(wildcards):
+    if not config["umi_usage"] == "umi_concensus":
+        return "mapped/{sample}.markDups.bam"
+    else:
+        return "mapped/{sample}.concensus.bam"
 
 rule index_and_stats:
-    input:  bam = "mapped/{sample}.markDups.bam"
+    input:  index_and_stats_input,
     output: bam = "mapped/{sample}.bam",
             bai = "mapped/{sample}.bam.bai",
             idxstats = "qc_reports/{sample}/index_and_stats/{sample}.idxstats.tsv",
@@ -63,11 +29,25 @@ rule index_and_stats:
     script: "../wrappers/index_and_stats/script.py"
 
 
+rule umi_concensus:
+    input:  bam = "mapped/{sample}.not_markDups.bam",
+            ref = expand("{ref_dir}/index/BWA/{ref}.bwt",ref_dir=reference_directory,ref=config["reference"])[0],
+            lib_ROI = expand("{ref_dir}/intervals/{lib_ROI}/{lib_ROI}.bed",ref_dir=reference_directory,lib_ROI=config["lib_ROI"])[0],
+            fa = expand("{ref_dir}/seq/{ref}.fa",ref_dir=reference_directory,ref=config["reference"])[0],
+    output: bam = "mapped/{sample}.concensus.bam",
+            html = "qc_reports/{sample}/umi_concensus/umi_concensus.html",
+            json = "qc_reports/{sample}/umi_concensus/umi_concensus.json",
+            #report_path = directory("qc_reports/{sample}/umi_concensus"),
+    log: "logs/{sample}/umi_concensus.log"
+    params: umi_consensus_min_support = config["umi_consensus_min_support"],
+    conda: "../wrappers/umi_concensus/env.yaml"
+    script: "../wrappers/umi_concensus/script.py"
+
 
 rule mark_duplicates:
     input: bam = "mapped/{sample}.not_markDups.bam",
     output: bam = "mapped/{sample}.markDups.bam",
-            mtx= "qc_reports/{sample}/MarkDuplicates/{sample}.markDups_metrics.txt"
+            mtx = "qc_reports/{sample}/MarkDuplicates/{sample}.markDups_metrics.txt"
     log:    "logs/{sample}/mark_duplicates.log"
     resources: mem=10
     params: mark_duplicates=config["mark_duplicates"],

@@ -97,4 +97,4 @@ if snakemake.params.mark_duplicates == True:
 else:
 
     shell("mv -T " + snakemake.input.bam + " " + snakemake.output.bam)
-    shell("mv -T " + snakemake.input.bai + " " + snakemake.output.bai)
+    #shell("mv -T " + snakemake.input.bai + " " + snakemake.output.bai)
