@@ -24,7 +24,6 @@ rule alignment_DNA_multiqc:
     conda: "../wrappers/alignment_DNA_multiqc/env.yaml"
     script: "../wrappers/alignment_DNA_multiqc/script.py"
 
-
 def index_and_stats_input(wildcards):
     if not config["umi_usage"] == "umi_concensus":
         return BR.remote("mapped/{sample}.markDups.bam")
