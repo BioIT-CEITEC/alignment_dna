@@ -50,7 +50,7 @@ wildcard_constraints:
 rule all:
     input:  expand("mapped/{sample}.bam",sample = sample_tab.sample_name),
             expand("mapped/{sample}.bam.bai", sample = sample_tab.sample_name),
-            # "qc_reports/all_samples/alignment_DNA_multiqc/multiqc.html"
+            "qc_reports/all_samples/alignment_DNA_multiqc/multiqc.html"
 
 ##### Modules #####
 

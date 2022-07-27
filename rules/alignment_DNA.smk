@@ -59,53 +59,44 @@ rule mark_duplicates:
     script: "../wrappers/mark_duplicates/script.py"
 
 
+def alignment_DNA_input(wildcards):
+    if config["trim_adapters"]:
+        preprocessed = "cleaned_fastq"
+    else:
+        preprocessed = "raw_fastq"
+    if read_pair_tags == [""]:
+        return [os.path.join(preprocessed,"{sample}.fastq.gz")]
+    else:
+        return [os.path.join(preprocessed,"{sample}_R1.fastq.gz"),os.path.join(preprocessed,"{sample}_R2.fastq.gz")]
 
 
+rule alignment_DNA:
+    input:  fastqs = alignment_DNA_input,
+            ref = expand("{ref_dir}/index/BWA/{ref}.bwt",ref_dir=reference_directory,ref = config["reference"])[0],
+    output: bam = "mapped/{sample}.not_markDups.bam",
+            bai = "mapped/{sample}.not_markDups.bam.bai"
+    log:    "logs/{sample}/alignment_DNA.log"
+    params: entity_name=config["entity_name"]
+    threads: 40
+    conda: "../wrappers/alignment_DNA/env.yaml"
+    script: "../wrappers/alignment_DNA/script.py"
 
 
+def trim_adapters_input(wildcards):
+    if config["trim_adapters"]:
+        if read_pair_tags == [""]:
+            return "raw_fastq/{sample}.fastq.gz"
+        else:
+            return ["raw_fastq/{sample}_R1.fastq.gz","raw_fastq/{sample}_R2.fastq.gz"]
 
-#
-#
-#
-#
-# def alignment_DNA_input(wildcards):
-#     if config["trim_adapters"]:
-#         preprocessed = "cleaned_fastq"
-#     else:
-#         preprocessed = "raw_fastq"
-#     if read_pair_tags == [""]:
-#         return [os.path.join(preprocessed,"{sample}.fastq.gz")]
-#     else:
-#         return [os.path.join(preprocessed,"{sample}_R1.fastq.gz"),os.path.join(preprocessed,"{sample}_R2.fastq.gz")]
-#
-#
-# rule alignment_DNA:
-#     input:  fastqs = alignment_DNA_input,
-#             ref = expand("{ref_dir}/index/BWA/{ref}.bwt",ref_dir=reference_directory,ref = config["reference"])[0],
-#     output: bam = "mapped/{sample}.not_markDups.bam",
-#             bai = "mapped/{sample}.not_markDups.bam.bai"
-#     log:    "logs/{sample}/alignment_DNA.log"
-#     params: entity_name=config["entity_name"]
-#     threads: 40
-#     conda: "../wrappers/alignment_DNA/env.yaml"
-#     script: "../wrappers/alignment_DNA/script.py"
-#
-#
-# def trim_adapters_input(wildcards):
-#     if config["trim_adapters"]:
-#         if read_pair_tags == [""]:
-#             return "raw_fastq/{sample}.fastq.gz"
-#         else:
-#             return ["raw_fastq/{sample}_R1.fastq.gz","raw_fastq/{sample}_R2.fastq.gz"]
-#
-#
-# rule trim_adapters:
-#     input:  trim_adapters_input,
-#     output: fastq = expand("cleaned_fastq/{{sample}}{read_pair_tag}.fastq.gz",read_pair_tag = read_pair_tags),
-#             trim_stats = expand("qc_reports/{{sample}}/trim_galore/trim_stats{read_pair_tag}.log",read_pair_tag=read_pair_tags)
-#     log:    "logs/{sample}/trim_adapters.log"
-#     params: paired = paired,
-#             outdir = "cleaned_fastq",
-#     threads: 8
-#     conda: "../wrappers/trim_adapters/env.yaml"
-#     script: "../wrappers/trim_adapters/script.py"
+
+rule trim_adapters:
+    input:  trim_adapters_input,
+    output: fastq = expand("cleaned_fastq/{{sample}}{read_pair_tag}.fastq.gz",read_pair_tag = read_pair_tags),
+            trim_stats = expand("qc_reports/{{sample}}/trim_galore/trim_stats{read_pair_tag}.log",read_pair_tag=read_pair_tags)
+    log:    "logs/{sample}/trim_adapters.log"
+    params: paired = paired,
+            outdir = "cleaned_fastq",
+    threads: 8
+    conda: "../wrappers/trim_adapters/env.yaml"
+    script: "../wrappers/trim_adapters/script.py"
