@@ -16,17 +16,18 @@ f.write("## CONDA: "+version+"\n")
 f.close()
 
 
-command = "mv " + snakemake.input + " " + snakemake.output.bam
-f = open(log_filename, 'at')
-f.write("## COMMAND: " + command + "\n")
-f.close()
-shell(command)
-
-command = "samtools index -@" + str(snakemake.threads) + " " + snakemake.output.bam
+command = "samtools sort -@ " + str(snakemake.threads) + " -o " +snakemake.output.bam + " " + str(snakemake.input)
 f = open(log_filename, 'at')
 f.write("## COMMAND: "+command+"\n")
 f.close()
 shell(command)
+
+command = "samtools index -@ " + str(snakemake.threads) + " " + snakemake.output.bam
+f = open(log_filename, 'at')
+f.write("## COMMAND: "+command+"\n")
+f.close()
+shell(command)
+
 
 command = "samtools idxstats "+snakemake.output.bam+" > "+snakemake.output.idxstats+" 2>> "+log_filename+" "
 f = open(log_filename, 'at')

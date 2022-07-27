@@ -15,7 +15,17 @@ f = open(log_filename, 'at')
 f.write("## CONDA: "+version+"\n")
 f.close()
 
-multiqc_search_paths = " ".join(snakemake.input.bam) + " " + " ".join(snakemake.input.samtools) + " " + " ".join(snakemake.input.trim_galore) + " " + " ".join(snakemake.input.mark_duplicates)
+#multiqc_search_paths = " ".join(snakemake.input.bam) + " " + " ".join(snakemake.input.samtools) + " " + " ".join(snakemake.input.trim_galore) + " " + " ".join(snakemake.input.mark_duplicates)
+multiqc_search_paths = " ".join(snakemake.input.bam) + " ".join(snakemake.input.index_and_stats)
+
+if snakemake.params.trim_adapters:
+    multiqc_search_paths = multiqc_search_paths + " ".join(snakemake.input.trim_galore)
+if snakemake.params.mark_duplicates:
+    if not snakemake.params.umi_usage == "umi_concensus":
+        multiqc_search_paths = multiqc_search_paths + " ".join(snakemake.input.mark_duplicates)
+    else:
+        multiqc_search_paths = multiqc_search_paths + " ".join(snakemake.input.umi_concensus)
+
 
 command = "multiqc -f -n " + snakemake.output.html + " " + multiqc_search_paths + \
               " --cl_config \"{{read_count_multiplier: 0.001, read_count_prefix: 'K', read_count_desc: 'thousands' }}\" >> "+log_filename+" 2>&1"
@@ -23,3 +33,9 @@ f = open(log_filename, 'at')
 f.write("## COMMAND: "+command+"\n")
 f.close()
 shell(command)
+
+
+
+
+
+

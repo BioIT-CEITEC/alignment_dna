@@ -28,12 +28,6 @@ if snakemake.params.mark_duplicates == True:
         f.close()
         shell(command)
 
-        # command = "samtools index "+snakemake.output.bam
-        # f = open(log_filename, 'at')
-        # f.write("## COMMAND: "+command+"\n")
-        # f.close()
-        # shell(command)
-
     else:
 
         java_opts = "export _JAVA_OPTIONS='-Xmx"+str(snakemake.resources.mem)+"g'"
@@ -55,30 +49,16 @@ if snakemake.params.mark_duplicates == True:
         f.close()
         shell(command)
 
-        # command = "samtools index -@" + str(snakemake.threads) + " " + snakemake.output.bam
-        # f = open(log_filename, 'at')
-        # f.write("## COMMAND: "+command+"\n")
-        # f.close()
-        # shell(command)
 
+    if snakemake.params.keep_not_markDups_bam == False:
 
-
-    # if snakemake.params.keep_not_markDups_bam == False:
-    #
-    #     command = "rm " + snakemake.input.bam
-    #     f = open(log_filename, 'at')
-    #     f.write("## COMMAND: " + command + "\n")
-    #     f.close()
-    #     shell(command)
-
-
-        # command = "rm " + snakemake.input.bam + ".bai"
-        # f = open(log_filename, 'at')
-        # f.write("## COMMAND: " + command + "\n")
-        # f.close()
-        # shell(command)
+        command = "rm " + snakemake.input.bam
+        f = open(log_filename, 'at')
+        f.write("## COMMAND: " + command + "\n")
+        f.close()
+        shell(command)
 
 else:
 
     shell("mv -T " + snakemake.input.bam + " " + snakemake.output.bam)
-    #shell("mv -T " + snakemake.input.bai + " " + snakemake.output.bai)
+

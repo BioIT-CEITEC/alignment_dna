@@ -3,12 +3,15 @@
 def alignment_DNA_multiqc_input(wildcards):
     input = {
         "bam": BR.remote(expand("mapped/{sample}.bam",sample=sample_tab.sample_name)),
-        "samtools": BR.remote(expand("qc_reports/{sample}/index_and_stats/{sample}.{stat}.tsv",sample=sample_tab.sample_name,stat=["flagstat", "idxstats"])),
+        "index_and_stats": BR.remote(expand("qc_reports/{sample}/index_and_stats/{sample}.{stat}.tsv",sample=sample_tab.sample_name,stat=["flagstat", "idxstats"])),
     }
     if config["trim_adapters"]:
         input["trim_galore"] = BR.remote(expand("qc_reports/{sample}/trim_galore/trim_stats{read_pair_tag}.log",sample=sample_tab.sample_name,read_pair_tag=read_pair_tags))
     if config["mark_duplicates"]:
-        input["mark_duplicates"] = BR.remote(expand("qc_reports/{sample}/MarkDuplicates/{sample}.markDups_metrics.txt",sample=sample_tab.sample_name))
+        if not config["umi_usage"] == "umi_concensus":
+            input["mark_duplicates"] = BR.remote(expand("qc_reports/{sample}/MarkDuplicates/{sample}.markDups_metrics.txt",sample=sample_tab.sample_name))
+        else:
+            input["umi_concensus"] = BR.remote(expand("qc_reports/{sample}/umi_concensus/umi_concensus.{end}"),sample=sample_tab.sample_name,end=["html", "json"])
     return input
 
 rule alignment_DNA_multiqc:
@@ -16,7 +19,8 @@ rule alignment_DNA_multiqc:
     output: html=BR.remote("qc_reports/all_samples/alignment_DNA_multiqc/multiqc.html")
     log: BR.remote("logs/all_samples/alignment_DNA_multiqc.log")
     params: trim_adapters=config["trim_adapters"],
-            mark_duplicates=config["mark_duplicates"]
+            mark_duplicates=config["mark_duplicates"],
+            umi_usage= config["umi_usage"]
     conda: "../wrappers/alignment_DNA_multiqc/env.yaml"
     script: "../wrappers/alignment_DNA_multiqc/script.py"
 
@@ -49,6 +53,7 @@ rule umi_concensus:
             json = BR.remote("qc_reports/{sample}/umi_concensus/umi_concensus.json"),
     log: BR.remote("logs/{sample}/umi_concensus.log")
     params: umi_consensus_min_support = config["umi_consensus_min_support"],
+            keep_not_markDups_bam=config["keep_not_markDups_bam"],
     conda: "../wrappers/umi_concensus/env.yaml"
     script: "../wrappers/umi_concensus/script.py"
 
