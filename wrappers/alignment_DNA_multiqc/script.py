@@ -20,7 +20,10 @@ multiqc_search_paths = "./mapped/*"
 if snakemake.params.trim_adapters:
     multiqc_search_paths = multiqc_search_paths + " ./qc_reports/*/trim_galore/*"
 if snakemake.params.mark_duplicates:
-    multiqc_search_paths = multiqc_search_paths + " ./qc_reports/*/MarkDuplicates/*"
+    if not snakemake.params.umi_usage == "umi_concensus":
+        multiqc_search_paths = multiqc_search_paths + " ./qc_reports/*/MarkDuplicates/*"
+    else:
+        multiqc_search_paths = multiqc_search_paths + " ./qc_reports/*/umi_concensus/*"
 
 multiqc_search_paths = multiqc_search_paths + " ./qc_reports/*/index_and_stats/*"
 

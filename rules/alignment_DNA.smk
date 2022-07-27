@@ -6,7 +6,8 @@ rule alignment_DNA_multiqc:
     output: html= "qc_reports/all_samples/alignment_DNA_multiqc/multiqc.html"
     log:    "logs/all_samples/alignment_DNA_multiqc.log"
     params: trim_adapters=config["trim_adapters"],
-            mark_duplicates=config["mark_duplicates"]
+            mark_duplicates=config["mark_duplicates"],
+            umi_usage = config["umi_usage"]
     conda: "../wrappers/alignment_DNA_multiqc/env.yaml"
     script: "../wrappers/alignment_DNA_multiqc/script.py"
 
@@ -48,7 +49,7 @@ rule mark_duplicates:
     input: bam = "mapped/{sample}.not_markDups.bam",
     output: bam = "mapped/{sample}.markDups.bam",
             mtx = "qc_reports/{sample}/MarkDuplicates/{sample}.markDups_metrics.txt"
-    log:    "logs/{sample}/mark_duplicates.log"
+    log:    "logs/{sample}/mark_1231uplicates.log"
     resources: mem=10
     params: mark_duplicates=config["mark_duplicates"],
             rmDup=config["remove_duplicates"],
