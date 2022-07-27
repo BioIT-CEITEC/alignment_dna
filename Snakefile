@@ -23,8 +23,11 @@ read_pair_tags = BR.set_read_pair_tags()
 # #
 
 BR.load_ref()
+print(config["reference"])
 BR.load_organism()
+print(config["organism"])
 reference_directory = BR.reference_directory()
+print(config)
 
 wildcard_constraints:
     sample = "|".join(sample_tab.sample_name),
