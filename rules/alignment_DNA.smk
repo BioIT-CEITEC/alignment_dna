@@ -38,7 +38,6 @@ rule umi_concensus:
     output: bam = "mapped/{sample}.concensus.bam",
             html = "qc_reports/{sample}/umi_concensus/umi_concensus.html",
             json = "qc_reports/{sample}/umi_concensus/umi_concensus.json",
-            #report_path = directory("qc_reports/{sample}/umi_concensus"),
     log: "logs/{sample}/umi_concensus.log"
     params: umi_consensus_min_support = config["umi_consensus_min_support"],
     conda: "../wrappers/umi_concensus/env.yaml"
