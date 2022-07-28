@@ -4,8 +4,6 @@ min_version("7.2.1")
 
 configfile: "config.json"
 
-config["computing_type"] = "kubernetes"
-
 module BR:
     snakefile: gitlab("bioroots/bioroots_utilities", path="bioroots_utilities.smk",branch="main")
     config: config
@@ -23,11 +21,9 @@ read_pair_tags = BR.set_read_pair_tags()
 # #
 
 BR.load_ref()
-print(config["reference"])
 BR.load_organism()
-print(config["organism"])
 reference_directory = BR.reference_directory()
-print(config)
+
 
 wildcard_constraints:
     sample = "|".join(sample_tab.sample_name),
@@ -39,6 +35,10 @@ rule all:
     input:  BR.remote(expand("mapped/{sample}.bam",sample = sample_tab.sample_name)),
             BR.remote(expand("mapped/{sample}.bam.bai", sample = sample_tab.sample_name)),
             BR.remote("qc_reports/all_samples/alignment_DNA_multiqc/multiqc.html")
+    output: BR.remote("completed.txt")
+    shell: "touch {output}"
+
+
 
 ### Modules #####
 
