@@ -14,11 +14,9 @@ f.close()
 version = str(subprocess.Popen("conda list ", shell=True, stdout=subprocess.PIPE).communicate()[0], 'utf-8')
 f = open(log_filename, 'at')
 f.write("## CONDA: "+version+"\n")
-f\
-        .close()
+f.close()
 
 bwa_ref_prefix = re.sub(".bwt$","",snakemake.input.ref)
-
 
 command = "bwa mem -t "+str(snakemake.threads)+\
         " -R '@RG\\tID:"+snakemake.params.entity_name+"_"+snakemake.wildcards.sample+"\\tSM:"+snakemake.wildcards.sample+"\\tPL:illumina' -v 1 " +\
