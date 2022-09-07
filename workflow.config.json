@@ -49,12 +49,12 @@
         "label": "Regions of interest",
         "type": "enum",
         "default": "wgs",
-        "list": ##INCLUDE:resources_info/lib_ROI.json##
+        "list": ##INCLUDE:reference_info/lib_ROI.json##
       },
       "reference": {
         "label": "Genomic Reference",
         "type": "enum",
-        "default": ##INCLUDE:resources_info/default_reference.json##,
+        "default": ##INCLUDE:reference_info/default_reference.json##,
         "conditions": {
           "relevance": {
             "operand": "equal",
@@ -64,7 +64,7 @@
             }
           }
         },
-        "list": ##INCLUDE:resources_info/reference.json##
+        "list": ##INCLUDE:reference_info/reference2.json##
       }
     },
     "detailed": {
