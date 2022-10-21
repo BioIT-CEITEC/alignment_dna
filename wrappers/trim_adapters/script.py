@@ -15,7 +15,7 @@ f = open(log_filename, 'at')
 f.write("## CONDA: "+version+"\n")
 f.close()
 
-if snakemake.params.paired == "PE":
+if snakemake.params.paired:
         paired_flag = " --paired"
         r1 = snakemake.output[0]
         r2 = snakemake.output[1]
@@ -29,7 +29,7 @@ with open(log_filename, 'at') as f:
 shell(command)
 
 
-if snakemake.params.paired == "PE":
+if snakemake.params.paired:
         command = "mv " + r1.replace(".fastq.gz","_val_1.fq.gz") + " " + r1 + " 2>> "+log_filename
         with open(log_filename, 'at') as f:
                 f.write("## COMMAND: " + command + "\n")

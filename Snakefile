@@ -20,6 +20,7 @@ if config["lib_ROI"] != "wgs":
     f.close()
     config["reference"] = [ref_name for ref_name in lib_ROI_dict.keys() if isinstance(lib_ROI_dict[ref_name],dict) and config["lib_ROI"] in lib_ROI_dict[ref_name].keys()][0]
 
+
 # setting organism from reference
 f = open(os.path.join(GLOBAL_REF_PATH,"reference_info","reference2.json"),)
 reference_dict = json.load(f)
@@ -41,10 +42,8 @@ sample_tab = pd.DataFrame.from_dict(config["samples"],orient="index")
 
 if not config["is_paired"]:
     read_pair_tags = [""]
-    paired = "SE"
 else:
     read_pair_tags = ["_R1","_R2"]
-    paired = "PE"
 
 wildcard_constraints:
     sample = "|".join(sample_tab.sample_name),
