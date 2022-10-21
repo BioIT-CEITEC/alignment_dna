@@ -102,3 +102,4 @@ rule alignment_DNA_multiqc:
             umi_usage = config["umi_usage"]
     conda: "../wrappers/alignment_DNA_multiqc/env.yaml"
     script: "../wrappers/alignment_DNA_multiqc/script.py"
+
