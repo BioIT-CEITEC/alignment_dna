@@ -12,7 +12,7 @@ rule trim_adapters:
     output: fastq = expand("cleaned_fastq/{{sample}}{read_pair_tag}.fastq.gz",read_pair_tag = read_pair_tags),
             trim_stats = expand("qc_reports/{{sample}}/trim_galore/trim_stats{read_pair_tag}.log",read_pair_tag=read_pair_tags)
     log:    "logs/{sample}/trim_adapters.log"
-    params: paired = paired,
+    params: paired = config["is_paired"],
             outdir = "cleaned_fastq",
     threads: 8
     conda: "../wrappers/trim_adapters/env.yaml"
@@ -52,6 +52,7 @@ rule mark_duplicates:
             UMI=config["UMI"],
             umi_usage=config["umi_usage"],
             keep_not_markDups_bam=config["keep_not_markDups_bam"],
+            tmpd = GLOBAL_TMPD_PATH
     conda: "../wrappers/mark_duplicates/env.yaml"
     script: "../wrappers/mark_duplicates/script.py"
 
@@ -67,6 +68,7 @@ rule umi_concensus:
     log: "logs/{sample}/umi_concensus.log"
     params: umi_consensus_min_support = config["umi_consensus_min_support"],
             keep_not_markDups_bam=config["keep_not_markDups_bam"],
+            tmpd = GLOBAL_TMPD_PATH
     conda: "../wrappers/umi_concensus/env.yaml"
     script: "../wrappers/umi_concensus/script.py"
 
