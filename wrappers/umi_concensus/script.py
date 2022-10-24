@@ -38,3 +38,9 @@ if snakemake.params.keep_not_markDups_bam == False:
     f.write("## COMMAND: " + command + "\n")
     f.close()
     shell(command)
+
+    command = "rm " + snakemake.input.bai
+    f = open(log_filename, 'at')
+    f.write("## COMMAND: " + command + "\n")
+    f.close()
+    shell(command)

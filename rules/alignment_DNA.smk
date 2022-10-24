@@ -43,7 +43,8 @@ rule alignment_DNA:
 
 
 rule mark_duplicates:
-    input: bam = "mapped/{sample}.not_markDups.bam",
+    input:  bam = "mapped/{sample}.not_markDups.bam",
+            bai = "mapped/{sample}.not_markDups.bam.bai",
     output: bam = "mapped/{sample}.markDups.bam",
             mtx = "qc_reports/{sample}/MarkDuplicates/{sample}.markDups_metrics.txt"
     log:    "logs/{sample}/mark_1231uplicates.log"
@@ -60,6 +61,7 @@ rule mark_duplicates:
 
 rule umi_concensus:
     input:  bam = "mapped/{sample}.not_markDups.bam",
+            bai = "mapped/{sample}.not_markDups.bam.bai",
             ref = expand("{ref_dir}/index/BWA/{ref}.bwt",ref_dir=reference_directory,ref=config["reference"])[0],
             lib_ROI = expand("{ref_dir}/intervals/{lib_ROI}/{lib_ROI}.bed",ref_dir=reference_directory,lib_ROI=config["lib_ROI"])[0],
             fa = expand("{ref_dir}/seq/{ref}.fa",ref_dir=reference_directory,ref=config["reference"])[0],
