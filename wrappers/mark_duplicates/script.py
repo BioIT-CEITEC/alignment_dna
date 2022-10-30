@@ -20,7 +20,6 @@ if snakemake.params.mark_duplicates == True:
     os.makedirs(os.path.dirname(snakemake.output.mtx),exist_ok=True)
 
     if snakemake.params.UMI == "no_umi" or snakemake.params.umi_usage == "no":
-
         command = "export TMPDIR="+snakemake.params.tmpd+" TMP="+snakemake.params.tmpd+" && picard MarkDuplicates"+\
                   " INPUT="+snakemake.input.bam+\
                   " OUTPUT="+snakemake.output.bam+\
@@ -33,16 +32,8 @@ if snakemake.params.mark_duplicates == True:
                   " -Djava.io.tmpdir="+snakemake.params.tmpd+\
                   " 2>> "+log_filename
 
-        command = "samtools index "+snakemake.output.bam
-        f = open(log_filename, 'at')
-        f.write("## COMMAND: "+command+"\n")
-        f.close()
-        shell(command)
-
     else:
-
         java_opts = "export _JAVA_OPTIONS='-Xmx" + str(snakemake.resources.mem) + "g -Djava.io.tmpdir=" + snakemake.params.tmpd + "'"
-
         command = java_opts + "&& je markdupes " + \
                   "INPUT=" + snakemake.input.bam +\
                   " OUTPUT="+snakemake.output.bam+\
@@ -55,11 +46,10 @@ if snakemake.params.mark_duplicates == True:
                   " MM=1" + \
                   " 2>> "+log_filename+" "
 
-        f = open(log_filename, 'at')
-        f.write("## COMMAND: "+command+"\n")
-        f.close()
-        shell(command)
-
+    f = open(log_filename, 'at')
+    f.write("## COMMAND: "+command+"\n")
+    f.close()
+    shell(command)
 
     if snakemake.params.keep_not_markDups_bam == False:
         command = "rm " + snakemake.input.bam
@@ -73,7 +63,6 @@ if snakemake.params.mark_duplicates == True:
         f.write("## COMMAND: " + command + "\n")
         f.close()
         shell(command)
-
 
 else:
 
