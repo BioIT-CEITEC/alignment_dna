@@ -12,16 +12,17 @@ use rule * from BR as other_*
 
 ##### Config processing #####
 #
-GLOBAL_REF_PATH = config["globalResources"]
-sample_tab = BR.load_sample()
+GLOBAL_TMPD_PATH = config["globalTmpdPath"]
+os.makedirs(GLOBAL_TMPD_PATH, exist_ok=True)
 
+sample_tab = BR.load_sample()
 read_pair_tags = BR.set_read_pair_tags()
 
 # ##### Reference processing #####
 # #
 
-BR.load_ref()
-BR.load_organism()
+reference = BR.load_ref()
+organism = BR.load_organism()
 reference_directory = BR.reference_directory()
 
 

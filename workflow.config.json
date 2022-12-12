@@ -101,6 +101,31 @@
             }
           }
         }
+      },
+      "feature_count": {
+        "label": "Feature count",
+        "type": "bool",
+        "default": false
+      },
+      "RSEM": {
+        "label": "RSEM",
+        "type": "bool",
+        "default": false
+      },
+      "salmon_align": {
+        "label": "Salmon quantification BAM-based",
+        "type": "bool",
+        "default": false
+      },
+      "salmon_map": {
+        "label": "Salmon quantification fastq-based",
+        "type": "bool",
+        "default": false
+      },
+      "kallisto": {
+        "label": "Kallisto",
+        "type": "bool",
+        "default": false
       }
     }
   }

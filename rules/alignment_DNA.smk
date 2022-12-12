@@ -31,7 +31,8 @@ def alignment_DNA_input(wildcards):
 
 rule alignment_DNA:
     input:  fastqs = alignment_DNA_input,
-            ref= BR.remote(expand("{ref_dir}/tool_data/BWA/{ref}.{end}",ref_dir=reference_directory,ref=config["reference"],org=config["organism"],end=["amb", "ann", "bwt", "pac", "sa"])),
+            ref = BR.remote(expand("{ref_dir}/index/BWA/{ref}.{end}",ref_dir=reference_directory,ref=config["reference"],org=config["organism"],end=["amb", "ann", "bwt", "pac", "sa"])),
+            # ref = BR.remote(expand("{ref_dir}/tool_data/BWA/{ref}.{end}",ref_dir=reference_directory,ref=config["reference"],org=config["organism"],end=["amb", "ann", "bwt", "pac", "sa"])),
     output: bam = BR.remote("mapped/{sample}.not_markDups.bam"),
             bai = BR.remote("mapped/{sample}.not_markDups.bam.bai")
     log:    BR.remote("logs/{sample}/alignment_DNA.log")
@@ -46,21 +47,23 @@ rule mark_duplicates:
     output: bam = BR.remote("mapped/{sample}.markDups.bam"),
             mtx= BR.remote("qc_reports/{sample}/MarkDuplicates/{sample}.markDups_metrics.txt")
     log:    BR.remote("logs/{sample}/mark_duplicates.log")
-    threads: 8
     resources: mem=10
     params: mark_duplicates=config["mark_duplicates"],
             rmDup=config["remove_duplicates"],
             UMI=config["UMI"],
             umi_usage=config["umi_usage"],
             keep_not_markDups_bam=config["keep_not_markDups_bam"],
+            tmpd = GLOBAL_TMPD_PATH
     conda: "../wrappers/mark_duplicates/env.yaml"
     script: "../wrappers/mark_duplicates/script.py"
 
 
 rule umi_concensus:
     input:  bam = BR.remote("mapped/{sample}.not_markDups.bam"),
-            ref = BR.remote(expand("{ref_dir}/tool_data/BWA/{ref}.{end}",ref_dir=reference_directory,ref=config["reference"],end=["amb", "ann", "bwt", "pac", "sa"])),
-            lib_ROI = BR.remote(expand("{ref_dir}/DNA_panel/{lib_ROI}/{lib_ROI}.bed",ref_dir=reference_directory,lib_ROI=config["lib_ROI"])),
+            ref = BR.remote(expand("{ref_dir}/index/BWA/{ref}.{end}",ref_dir=reference_directory,ref=config["reference"],end=["amb", "ann", "bwt", "pac", "sa"])),
+            lib_ROI = BR.remote(expand("{ref_dir}/intervals/{lib_ROI}/{lib_ROI}.bed",ref_dir=reference_directory,lib_ROI=config["lib_ROI"])),
+            # ref = BR.remote(expand("{ref_dir}/tool_data/BWA/{ref}.{end}",ref_dir=reference_directory,ref=config["reference"],end=["amb", "ann", "bwt", "pac", "sa"])),
+            # lib_ROI = BR.remote(expand("{ref_dir}/DNA_panel/{lib_ROI}/{lib_ROI}.bed",ref_dir=reference_directory,lib_ROI=config["lib_ROI"])),
             fa = BR.remote(expand("{ref_dir}/seq/{ref}.fa",ref_dir=reference_directory,ref=config["reference"])),
     output: bam = BR.remote("mapped/{sample}.concensus.bam"),
             html = BR.remote("qc_reports/{sample}/umi_concensus/umi_concensus.html"),
@@ -68,6 +71,7 @@ rule umi_concensus:
     log: BR.remote("logs/{sample}/umi_concensus.log")
     params: umi_consensus_min_support = config["umi_consensus_min_support"],
             keep_not_markDups_bam=config["keep_not_markDups_bam"],
+            tmpd = GLOBAL_TMPD_PATH
     conda: "../wrappers/umi_concensus/env.yaml"
     script: "../wrappers/umi_concensus/script.py"
 
