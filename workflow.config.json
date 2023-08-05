@@ -98,8 +98,8 @@
           }
         }
       },
-      "feature_count": {
-        "label": "Feature count",
+      "featureCount": {
+        "label": "FeatureCount",
         "type": "bool",
         "default": false
       },
