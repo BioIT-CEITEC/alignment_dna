@@ -22,7 +22,8 @@
   ],
   "requested_params": [
     "is_paired",
-    "UMI"
+    "UMI",
+    "trim_adapters"
   ],
   "gui_params": {
     "primary": {
@@ -68,11 +69,6 @@
       }
     },
     "detailed": {
-      "trim_adapters": {
-        "label": "Trim adapters",
-        "type": "bool",
-        "default": true
-      },
       "mark_duplicates": {
         "label": "Mark duplicates",
         "type": "bool",
