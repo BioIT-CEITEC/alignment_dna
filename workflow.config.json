@@ -72,17 +72,65 @@
       "mark_duplicates": {
         "label": "Mark duplicates",
         "type": "bool",
-        "default": true
+        "default": true,
+        "value": {
+          "umi_usage": {
+            "mark_duplicates": true,
+            "no": false,
+            "umi_concensus": false
+          }
+        },
+        "conditions": {
+          "relevance": {
+            "operand": "equal",
+            "negation": true,
+            "values": {
+              "umi_usage": "umi_concensus"
+            }
+          }
+        }
       },
       "remove_duplicates": {
         "label": "Remove duplicates",
         "type": "bool",
-        "default": true
+        "default": true,
+        "conditions": {
+          "relevance": {
+            "operand": "equal",
+            "negation": false,
+            "values": {
+              "mark_duplicates": true
+            }
+          }
+        }
       },
       "keep_not_markDups_bam": {
         "label": "Keep not_markDups_bam file",
         "type": "bool",
-        "default": false
+        "default": false,
+        "conditions": {
+          "relevance": {
+            "operand": "equal",
+            "negation": false,
+            "values": {
+              "mark_duplicates": true
+            }
+          }
+        }
+      },
+      "keep_no_umi_consensus_bam": {
+        "label": "Keep bam file without UMI consensus",
+        "type": "bool",
+        "default": false,
+        "conditions": {
+          "relevance": {
+            "operand": "equal",
+            "negation": false,
+            "values": {
+              "umi_usage": "umi_concensus"
+            }
+          }
+        }
       },
       "umi_consensus_min_support": {
         "label": "UMI consensus min_support",

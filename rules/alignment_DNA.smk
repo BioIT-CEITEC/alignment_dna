@@ -70,7 +70,7 @@ rule umi_concensus:
             json = "qc_reports/{sample}/umi_concensus/umi_concensus.json",
     log: "logs/{sample}/umi_concensus.log"
     params: umi_consensus_min_support = config["umi_consensus_min_support"],
-            keep_not_markDups_bam=config["keep_not_markDups_bam"],
+            keep_not_markDups_bam=config["keep_no_umi_consensus_bam"],
             tmpd = GLOBAL_TMPD_PATH
     conda: "../wrappers/umi_concensus/env.yaml"
     script: "../wrappers/umi_concensus/script.py"
