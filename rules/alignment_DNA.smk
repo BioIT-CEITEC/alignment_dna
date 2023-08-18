@@ -46,7 +46,6 @@ rule mark_duplicates:
     input:  bam = "mapped/{sample}.not_markDups.bam",
             bai = "mapped/{sample}.not_markDups.bam.bai",
     output: bam = "mapped/{sample}.markDups.bam",
-            mtx = "qc_reports/{sample}/MarkDuplicates/{sample}.markDups_metrics.txt"
     log:    "logs/{sample}/mark_duplicates.log"
     resources: mem=10
     params: mark_duplicates=config["mark_duplicates"],
@@ -54,7 +53,8 @@ rule mark_duplicates:
             UMI=config["UMI"],
             umi_usage=config["umi_usage"],
             keep_not_markDups_bam=config["keep_not_markDups_bam"],
-            tmpd = GLOBAL_TMPD_PATH
+            tmpd = GLOBAL_TMPD_PATH,
+            mtx = lambda wc: "qc_reports/{wc.sample}/MarkDuplicates/{wc.sample}.markDups_metrics.txt"
     conda: "../wrappers/mark_duplicates/env.yaml"
     script: "../wrappers/mark_duplicates/script.py"
 
