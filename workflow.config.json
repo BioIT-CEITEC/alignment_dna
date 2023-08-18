@@ -79,15 +79,6 @@
             "no": false,
             "umi_concensus": false
           }
-        },
-        "conditions": {
-          "relevance": {
-            "operand": "equal",
-            "negation": true,
-            "values": {
-              "umi_usage": "umi_concensus"
-            }
-          }
         }
       },
       "remove_duplicates": {
