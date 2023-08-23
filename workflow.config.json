@@ -74,16 +74,9 @@
         "type": "bool",
         "default": true,
         "conditions": {
-          "relevance": {
-            "operand": "equal",
-            "negation": false,
-            "values": {
-              "umi_usage": "mark_duplicates"
-            }
-          },
           "value": {
             "umi_usage": {
-              "no": false,
+              "no": true,
               "mark_duplicates": true,
               "umi_concensus": false
             }
@@ -99,8 +92,7 @@
             "operand": "equal",
             "negation": false,
             "values": {
-              "mark_duplicates": true,
-              "umi_usage": "mark_duplicates"
+              "mark_duplicates": true
             }
           }
         }
@@ -114,8 +106,7 @@
             "operand": "equal",
             "negation": false,
             "values": {
-              "mark_duplicates": true,
-              "umi_usage": "mark_duplicates"
+              "mark_duplicates": true
             }
           }
         }
