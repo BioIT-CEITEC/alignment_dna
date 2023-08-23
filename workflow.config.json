@@ -78,7 +78,15 @@
             "operand": "equal",
             "negation": false,
             "values": {
-              "umi_usage": "mark_duplicates"
+              "umi_usage": "mark_duplicates",
+              "umi_usage": "no"
+            }
+          },
+          "value": {
+            "umi_usage": {
+              "no": false,
+              "mark_duplicates": true,
+              "umi_concensus": false
             }
           }
         }
@@ -93,7 +101,8 @@
             "negation": false,
             "values": {
               "mark_duplicates": true,
-              "umi_usage": "mark_duplicates"
+              "umi_usage": "mark_duplicates",
+              "umi_usage": "no"
             }
           }
         }
@@ -108,7 +117,8 @@
             "negation": false,
             "values": {
               "mark_duplicates": true,
-              "umi_usage": "mark_duplicates"
+              "umi_usage": "mark_duplicates",
+              "umi_usage": "no"
             }
           }
         }
