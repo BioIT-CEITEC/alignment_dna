@@ -73,14 +73,7 @@
         "label": "Mark duplicates",
         "type": "bool",
         "default": true,
-        "conditions": {          
-          "relevance": {
-            "operand": "equal",
-            "negation": true,
-            "values": {
-              "umi_usage": "umi_concensus"
-            }
-          },
+        "conditions": {
           "value": {
             "umi_usage": {
               "mark_duplicates": true,
