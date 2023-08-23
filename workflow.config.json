@@ -76,10 +76,9 @@
         "conditions": {
           "relevance": {
             "operand": "equal",
-            "negation": false,
+            "negation": true,
             "values": {
-              "umi_usage": "mark_duplicates",
-              "umi_usage": "no"
+              "umi_usage": "umi_concensus"
             }
           },
           "value": {
@@ -98,11 +97,10 @@
         "conditions": {
           "relevance": {
             "operand": "equal",
-            "negation": false,
+            "negation": true,
             "values": {
-              "mark_duplicates": true,
-              "umi_usage": "mark_duplicates",
-              "umi_usage": "no"
+              "mark_duplicates": false,
+              "umi_usage": "umi_concensus"
             }
           }
         }
@@ -114,11 +112,10 @@
         "conditions": {
           "relevance": {
             "operand": "equal",
-            "negation": false,
+            "negation": true,
             "values": {
-              "mark_duplicates": true,
-              "umi_usage": "mark_duplicates",
-              "umi_usage": "no"
+              "mark_duplicates": false,
+              "umi_usage": "umi_concensus"
             }
           }
         }
