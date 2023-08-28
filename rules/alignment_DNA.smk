@@ -1,5 +1,4 @@
 
-
 # def trim_adapters_input(wildcards):
 #     if config["trim_adapters"]:
 #         if read_pair_tags == [""]:
@@ -54,7 +53,7 @@ rule mark_duplicates:
             umi_usage=config["umi_usage"],
             keep_not_markDups_bam=config["keep_not_markDups_bam"],
             tmpd = GLOBAL_TMPD_PATH,
-            mtx = lambda wc: "qc_reports/{wc.sample}/MarkDuplicates/{wc.sample}.markDups_metrics.txt"
+            mtx = "qc_reports/{sample}/MarkDuplicates/{sample}.markDups_metrics.txt"
     conda: "../wrappers/mark_duplicates/env.yaml"
     script: "../wrappers/mark_duplicates/script.py"
 
