@@ -80,6 +80,13 @@
               "mark_duplicates": true,
               "umi_concensus": false
             }
+          },
+          "relevance": {
+            "operand": "notEqual",
+            "negation": false,
+            "values": {
+              "umi_usage": "umi_concensus"
+            }
           }
         }
       },
@@ -89,10 +96,11 @@
         "default": true,
         "conditions": {
           "relevance": {
-            "operand": "equal",
+            "operand": "notEqual",
             "negation": false,
             "values": {
-              "mark_duplicates": true
+              "mark_duplicates": false,
+              "umi_usage": "umi_concensus"
             }
           }
         }
@@ -103,10 +111,11 @@
         "default": false,
         "conditions": {
           "relevance": {
-            "operand": "equal",
+            "operand": "notEqual",
             "negation": false,
             "values": {
-              "mark_duplicates": true
+              "mark_duplicates": false,
+              "umi_usage": "umi_concensus"
             }
           }
         }
