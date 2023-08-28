@@ -74,18 +74,18 @@
         "type": "bool",
         "default": true,
         "conditions": {
-          "value": {
-            "umi_usage": {
-              "no": true,
-              "mark_duplicates": true,
-              "umi_concensus": false
-            }
-          },
           "relevance": {
             "operand": "notEqual",
             "negation": false,
             "values": {
               "umi_usage": "umi_concensus"
+            }
+          },
+          "value": {
+            "umi_usage": {
+              "no": true,
+              "mark_duplicates": true,
+              "umi_concensus": false
             }
           }
         }
