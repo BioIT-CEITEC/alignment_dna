@@ -153,6 +153,12 @@
         "type": "bool",
         "default": false
       },
+      "count_over": {
+        "label": "Count over",
+        "type": "enum",
+        "default": "exon",
+        "list": {"exon": "exon"}
+      },
       "RSEM": {
         "label": "RSEM",
         "type": "bool",
