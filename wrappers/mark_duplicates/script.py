@@ -13,7 +13,7 @@ f.close()
 
 version = str(subprocess.Popen("conda list ", shell=True, stdout=subprocess.PIPE).communicate()[0], 'utf-8')
 f = open(log_filename, 'at')
-f.write("## CONDA: "+version+"\n")
+f.write("## CONDA:\n"+version+"\n")
 f.close()
 
 if snakemake.params.mark_duplicates == True:
@@ -52,13 +52,13 @@ if snakemake.params.mark_duplicates == True:
     shell(command)
 
     if snakemake.params.keep_not_markDups_bam == False:
-        command = "rm " + snakemake.input.bam
+        command = "rm -f " + snakemake.input.bam + " >> " + log_filename + " 2>&1"
         f = open(log_filename, 'at')
         f.write("## COMMAND: " + command + "\n")
         f.close()
         shell(command)
 
-        command = "rm " + snakemake.input.bai
+        command = "rm -f " + snakemake.input.bai + " >> " + log_filename + " 2>&1"
         f = open(log_filename, 'at')
         f.write("## COMMAND: " + command + "\n")
         f.close()
@@ -66,5 +66,15 @@ if snakemake.params.mark_duplicates == True:
 
 else:
 
-    shell("mv -T " + snakemake.input.bam + " " + snakemake.output.bam)
+    command = "mv -T " + snakemake.input.bam + " " + snakemake.output.bam + " >> " + log_filename + " 2>&1"
+    f = open(log_filename, 'at')
+    f.write("## COMMAND: "+command+"\n")
+    f.close()
+    shell(command)
+
+    command = "touch " + snakemake.output.mtx + " >> " + log_filename + " 2>&1"
+    f = open(log_filename, 'at')
+    f.write("## COMMAND: "+command+"\n")
+    f.close()
+    shell(command)
 
