@@ -31,7 +31,7 @@ def alignment_DNA_input(wildcards):
 
 rule alignment_DNA:
     input:  fastqs = alignment_DNA_input,
-            ref = expand("{ref_dir}/index/BWA/{ref}.bwt",ref_dir=reference_directory,ref = config["reference"])[0],
+            ref = config["organism_bwa"],  # defined in utilities
     output: bam = "mapped/{sample}.not_markDups.bam",
             bai = "mapped/{sample}.not_markDups.bam.bai"
     log:    "logs/{sample}/alignment_DNA.log"
@@ -61,9 +61,9 @@ rule mark_duplicates:
 rule umi_concensus:
     input:  bam = "mapped/{sample}.not_markDups.bam",
             bai = "mapped/{sample}.not_markDups.bam.bai",
-            ref = expand("{ref_dir}/index/BWA/{ref}.bwt",ref_dir=reference_directory,ref=config["reference"])[0],
-            lib_ROI = expand("{ref_dir}/intervals/{lib_ROI}/{lib_ROI}.bed",ref_dir=reference_directory,lib_ROI=config["lib_ROI"])[0],
-            fa = expand("{ref_dir}/seq/{ref}.fa",ref_dir=reference_directory,ref=config["reference"])[0],
+            ref = config["organism_bwa"],  # defined in utilities
+            lib_ROI = config["dna_panel"],  # defined in utilities
+            fa = config["organism_fasta"],  # defined in utilities
     output: bam = "mapped/{sample}.concensus.bam",
             html = "qc_reports/{sample}/umi_concensus/umi_concensus.html",
             json = "qc_reports/{sample}/umi_concensus/umi_concensus.json",

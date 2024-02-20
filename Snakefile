@@ -11,39 +11,26 @@ GLOBAL_TMPD_PATH = config["globalTmpdPath"]
 
 os.makedirs(GLOBAL_TMPD_PATH, exist_ok=True)
 
-# Reference processing
-#
-if config["lib_ROI"] != "wgs":
-    # setting reference from lib_ROI
-    f = open(os.path.join(GLOBAL_REF_PATH,"reference_info","lib_ROI.json"))
-    lib_ROI_dict = json.load(f)
-    f.close()
-    config["reference"] = [ref_name for ref_name in lib_ROI_dict.keys() if isinstance(lib_ROI_dict[ref_name],dict) and config["lib_ROI"] in lib_ROI_dict[ref_name].keys()][0]
+##### BioRoot utilities #####
+module BR:
+    snakefile: gitlab("bioroots/bioroots_utilities", path="bioroots_utilities.smk",branch="master")
+    config: config
 
+use rule * from BR as other_*
 
-# setting organism from reference
-f = open(os.path.join(GLOBAL_REF_PATH,"reference_info","reference2.json"),)
-reference_dict = json.load(f)
-f.close()
-config["species_name"] = [organism_name for organism_name in reference_dict.keys() if isinstance(reference_dict[organism_name],dict) and config["reference"] in reference_dict[organism_name].keys()][0]
-config["organism"] = config["species_name"].split(" (")[0].lower().replace(" ","_")
-if len(config["species_name"].split(" (")) > 1:
-    config["species"] = config["species_name"].split(" (")[1].replace(")","")
+#### Reference processing ####
 
+references = BR.load_ROI()
 
 ##### Config processing #####
-# Folders
-#
-reference_directory = os.path.join(GLOBAL_REF_PATH,config["organism"],config["reference"])
 
-# Samples
-#
-sample_tab = pd.DataFrame.from_dict(config["samples"],orient="index")
+sample_tab = BR.load_sample()
 
-if not config["is_paired"]:
-    read_pair_tags = [""]
-else:
-    read_pair_tags = ["_R1","_R2"]
+read_pair_tags = BR.set_read_pair_qc_tags() # ["SE"] / ["R1", "R2]
+pair_tag = BR.set_read_pair_tags() # [""] / ["_R1", "_R2"]
+paired = BR.set_paired_tags() # "SE" / "PE"
+
+config = BR.load_organism()
 
 wildcard_constraints:
     sample = "|".join(sample_tab.sample_name),
