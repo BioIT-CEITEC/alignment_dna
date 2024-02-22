@@ -20,7 +20,7 @@
 
 def alignment_DNA_input(wildcards):
     if config["trim_adapters"]:
-        preprocessed = "cleaned_fastq"
+        preprocessed = "processed_fastq"
     else:
         preprocessed = "raw_fastq"
     if read_pair_tags == [""]:
