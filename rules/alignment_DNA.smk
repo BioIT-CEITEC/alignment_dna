@@ -8,11 +8,11 @@
 #
 # rule trim_adapters:
 #     input:  trim_adapters_input,
-#     output: fastq = expand("cleaned_fastq/{{sample}}{read_pair_tag}.fastq.gz",read_pair_tag = read_pair_tags),
+#     output: fastq = expand("processed/{{sample}}{read_pair_tag}.fastq.gz",read_pair_tag = read_pair_tags),
 #             trim_stats = expand("qc_reports/{{sample}}/trim_galore/trim_stats{read_pair_tag}.log",read_pair_tag=read_pair_tags)
 #     log:    "logs/{sample}/trim_adapters.log"
 #     params: paired = config["is_paired"],
-#             outdir = "cleaned_fastq",
+#             outdir = "processed",
 #     threads: 8
 #     conda: "../wrappers/trim_adapters/env.yaml"
 #     script: "../wrappers/trim_adapters/script.py"
@@ -20,7 +20,7 @@
 
 def alignment_DNA_input(wildcards):
     if config["trim_adapters"]:
-        preprocessed = "cleaned_fastq"
+        preprocessed = "processed"
     else:
         preprocessed = "raw_fastq"
     if read_pair_tags == [""]:
