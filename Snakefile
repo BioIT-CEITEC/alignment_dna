@@ -18,10 +18,6 @@ module BR:
 
 use rule * from BR as other_*
 
-#### Reference processing ####
-
-references = BR.load_ROI()
-
 ##### Config processing #####
 
 sample_tab = BR.load_sample()
