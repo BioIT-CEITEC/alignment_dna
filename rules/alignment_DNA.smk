@@ -62,7 +62,7 @@ rule umi_concensus:
     input:  bam = "mapped/{sample}.not_markDups.bam",
             bai = "mapped/{sample}.not_markDups.bam.bai",
             ref = config["organism_bwa"],  # defined in utilities
-            lib_ROI = config["dna_panel"],  # defined in utilities
+            lib_ROI = config["organism_dna_panel"],  # defined in utilities
             fa = config["organism_fasta"],  # defined in utilities
     output: bam = "mapped/{sample}.concensus.bam",
             html = "qc_reports/{sample}/umi_concensus/umi_concensus.html",
