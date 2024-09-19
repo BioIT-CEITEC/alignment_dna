@@ -50,30 +50,6 @@
         "label": "Organism",
         "type": "enum",
         "dynamicEnumName": "organism"
-      },
-      "reference": {
-        "label": "Genomic Reference",
-        "type": "enum",
-        "dynamicEnumName": "reference",
-        "filters": {
-          "group": {
-            "param": "organism",
-            "type": "value",
-            "showGroupLabel": false
-          }
-        }
-      },
-      "lib_ROI": {
-        "label": "Regions of interest",
-        "type": "enum",
-        "dynamicEnumName": "lib_ROI",
-        "filters": {
-          "group": {
-            "param": "reference",
-            "type": "value",
-            "showGroupLabel": false
-          }
-        }
       }
     },
     "detailed": {
