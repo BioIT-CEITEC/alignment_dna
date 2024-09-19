@@ -32,28 +32,38 @@
       "type": "enum",
       "dynamicEnumName": "lib_ROI"
     },
-      "organism": {
-        "label": "Organism",
-        "type": "enum",
-        "list": {
-          "Organisms": {
-            "homo_sapiens": "Homo sapiens (human)",
-            "mus_musculus": "Mus musculus (mouse)"
-          }
-        }
-      },
-      "assembly": {
-        "label": "Assembly",
+      "enumParamFilter": {
+        "label": "Label 1",
         "type": "enum",
         "list": {
           "Homo sapiens (human)": {
-            "GRCh37": "GRCh37",
-            "GRCh38": "GRCh38"
+            "GRCh37": "Assembly GRCh37",
+            "GRCh38": "Assembly GRCh38"
           },
           "Mus musculus (mouse)": {
-            "GRCm38": "GRCm38",
-            "GRCm39": "GRCm39"
+            "GRCm38": "Assembly GRCm38",
+            "GRCm39": "Assembly GRCm39"
           }
+        }
+      },
+      "enumParam1": {
+        "label": "Label 2",
+        "type": "enum",
+        "list": {
+          "Assembly GRCh37": {
+            "r87": "Release 87"
+          },
+          "Assembly GRCh38": {
+            "r91": "Release 91",
+            "r95": "Release 95",
+            "r111": "Release 111"
+          },
+          "Assembly GRCm38": {
+            "r95": "Release 95"
+          },
+          "Assembly GRCm39": {
+            "r110": "Release 110",
+            "r111": "Release 111"
         },
         "filters": {
           "group": {
@@ -63,25 +73,21 @@
           }
         }
       },
-      "release": {
-        "label": "release",
+      "enumParam2": {
+        "label": "Label 3",
         "type": "enum",
         "list": {
-          "GRCh37": {
-            "r87": "Release 87"
+          "aaa1": {
+            "value1": "Value label 1"
           },
-          "GRCh38": {
-            "r91": "Release",
-            "r95": "Release 95",
-            "r110": "Release 110",
-            "r111": "Release 111 (latest)"
+          "bbb1": {
+            "value2": "Value label 2",
+            "value3": "Value label 3"
           },
-          "GRCm38": {
-            "r95": "Release 95"
+          "bbb2": {
+            "value4": "Value label 4"
           },
-          "GRCm39": {
-            "r111": "Release 111 (latest)"
-          }
+          "value5": "Value label 5"
         },
         "filters": {
           "group": {
