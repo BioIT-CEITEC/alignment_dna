@@ -28,7 +28,7 @@
     "gui_params": {
       "primary": {
       "lib_ROI": {
-        "label": "Dynamic enum",
+        "label": "Regions of Interest",
         "type": "enum",
         "dynamicEnumName": "lib_ROI"
       },
