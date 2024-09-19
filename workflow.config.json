@@ -32,7 +32,6 @@
       "type": "enum",
       "dynamicEnumName": "lib_ROI"
     },
-      {
   "enumParamFilter": {
     "label": "Label 1",
     "type": "enum",
@@ -44,6 +43,7 @@
         "bbb1": "Bbb 1",
         "bbb2": "Bbb 2"
       }
+    }
     }
   },
   "enumParam1": {
@@ -105,10 +105,9 @@
         "param": "enumParam1",
         "type": "value"
       }
-    }
   }
-}
-      },
+},
+      "umi_usage": {
       "umi_usage": {
         "label": "UMI usage",
         "type": "enum",
