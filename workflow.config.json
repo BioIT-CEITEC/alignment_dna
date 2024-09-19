@@ -1,230 +1,168 @@
 {
-  "workflow_description": {
-    "name": "alignment_DNA",
-    "version": 2.0,
-    "label": "Alignment DNA",
-    "type": "alignment_dna",
-    "inputs": "*/{sample}*fastq.gz",
-    "outputs": [
-      "mapped/{sample}.bam",
-      "mapped/{sample}.bam.bai",
-      "logs/{sample}/*",
-      "qc_reports/*"
-    ],
-    "report_index": "qc_reports/all_samples/alignment_DNA_multiqc/multiqc.html",
-    "reports":[
-       "qc_reports/*"
-    ]
-  },
-  "general_params": [
-    "entity_name",
-    "sample_name"
-  ],
-  "requested_params": [
-    "is_paired",
-    "UMI",
-    "trim_adapters"
-  ],
-  "gui_params": {
-    "primary": {
-    "lib_ROI": {
-      "label": "Regions of Interest",
-      "type": "enum",
-      "dynamicEnumName": "lib_ROI"
+    "workflow_description": {
+      "name": "alignment_DNA",
+      "version": 2.0,
+      "label": "Alignment DNA",
+      "type": "alignment_dna",
+      "inputs": "*/{sample}*fastq.gz",
+      "outputs": [
+        "mapped/{sample}.bam",
+        "mapped/{sample}.bam.bai",
+        "logs/{sample}/*",
+        "qc_reports/*"
+      ],
+      "report_index": "qc_reports/all_samples/alignment_DNA_multiqc/multiqc.html",
+      "reports":[
+         "qc_reports/*"
+      ]
     },
-      "enumParamFilter": {
-        "label": "Label 1",
+    "general_params": [
+      "entity_name",
+      "sample_name"
+    ],
+    "requested_params": [
+      "is_paired",
+      "UMI",
+      "trim_adapters"
+    ],
+    "gui_params": {
+      "primary": {
+      "lib_ROI": {
+        "label": "Dynamic enum",
         "type": "enum",
-        "list": {
-          "Organisms": {
-            "homo_sapiens": "Homo sapiens",
-            "mus_musculus": "Mus musculus"
+        "dynamicEnumName": "lib_ROI"
+      },
+        "umi_usage": {
+          "label": "UMI usage",
+          "type": "enum",
+          "default": "mark_duplicates",
+          "list": {
+            "no": "Don't use UMI",
+            "mark_duplicates": "Mark duplicates",
+            "umi_concensus": "UMI concensus"
           },
-          "Bbb group": {
-            "bbb1": "Bbb 1",
-            "bbb2": "Bbb 2"
+          "conditions": {
+            "relevance": {
+              "operand": "equal",
+              "negation": true,
+              "values": {
+                "UMI": "no_umi"
+              }
+            }
           }
         }
-      },
-      "enumParam1": {
-        "label": "Label 2",
-        "type": "enum",
-        "list": {
-          "Homo sapiens": {
-            "GRCh37": "GRCh37",
-            "GRCh38": "GRCh38"
-          },
-          "Bbb 1": {
-            "value2": "Value label 2",
-            "value3": "Value label 3"
-          },
-          "Bbb 2": {
-            "value4": "Value label 4"
-          },
-          "value5": "Value label 5"
         },
-        "filters": {
-          "group": {
-            "param": "enumParamFilter",
-            "type": "label",
-            "showGroupLabel": true
+      "detailed": {
+        "mark_duplicates": {
+          "label": "Mark duplicates",
+          "type": "bool",
+          "default": true,
+          "conditions": {
+            "relevance": {
+              "operand": "notEqual",
+              "negation": false,
+              "values": {
+                "umi_usage": "umi_concensus"
+              }
+            },
+            "value": {
+              "umi_usage": {
+                "no": true,
+                "mark_duplicates": true,
+                "umi_concensus": false
+              }
+            }
           }
-        }
-      },
-      "enumParam2": {
-        "label": "Label 3",
-        "type": "enum",
-        "list": {
-          "GRCh37": {
-            "r95": "Release 95"
-          },
-          "bbb1": {
-            "value2": "Value label 2",
-            "value3": "Value label 3"
-          },
-          "bbb2": {
-            "value4": "Value label 4"
-          },
-          "value5": "Value label 5"
         },
-        "filters": {
-          "group": {
-            "param": "enumParam1",
-            "type": "value"
+        "remove_duplicates": {
+          "label": "Remove duplicates",
+          "type": "bool",
+          "default": true,
+          "conditions": {
+            "relevance": {
+              "operand": "notEqual",
+              "negation": false,
+              "values": {
+                "mark_duplicates": false,
+                "umi_usage": "umi_concensus"
+              }
+            }
           }
-        }
-      },
-      "umi_usage": {
-        "label": "UMI usage",
-        "type": "enum",
-        "default": "mark_duplicates",
-        "list": {
-          "no": "Don't use UMI",
-          "mark_duplicates": "Mark duplicates",
-          "umi_concensus": "UMI concensus"
         },
-        "conditions": {
-          "relevance": {
-            "operand": "equal",
-            "negation": true,
-            "values": {
-              "UMI": "no_umi"
+        "keep_not_markDups_bam": {
+          "label": "Keep not_markDups_bam file",
+          "type": "bool",
+          "default": false,
+          "conditions": {
+            "relevance": {
+              "operand": "notEqual",
+              "negation": false,
+              "values": {
+                "mark_duplicates": false,
+                "umi_usage": "umi_concensus"
+              }
             }
           }
-        }
-      }
-      },
-    "detailed": {
-      "mark_duplicates": {
-        "label": "Mark duplicates",
-        "type": "bool",
-        "default": true,
-        "conditions": {
-          "relevance": {
-            "operand": "notEqual",
-            "negation": false,
-            "values": {
-              "umi_usage": "umi_concensus"
-            }
-          },
-          "value": {
-            "umi_usage": {
-              "no": true,
-              "mark_duplicates": true,
-              "umi_concensus": false
+        },
+        "keep_no_umi_consensus_bam": {
+          "label": "Keep bam file without UMI consensus",
+          "type": "bool",
+          "default": false,
+          "conditions": {
+            "relevance": {
+              "operand": "equal",
+              "negation": false,
+              "values": {
+                "umi_usage": "umi_concensus"
+              }
             }
           }
-        }
-      },
-      "remove_duplicates": {
-        "label": "Remove duplicates",
-        "type": "bool",
-        "default": true,
-        "conditions": {
-          "relevance": {
-            "operand": "notEqual",
-            "negation": false,
-            "values": {
-              "mark_duplicates": false,
-              "umi_usage": "umi_concensus"
+        },
+        "umi_consensus_min_support": {
+          "label": "UMI consensus min_support",
+          "type": "int",
+          "default": 1,
+          "conditions": {
+            "relevance": {
+              "operand": "equal",
+              "negation": false,
+              "values": {
+                "umi_usage": "umi_concensus"
+              }
             }
           }
+        },
+        "featureCount": {
+          "label": "FeatureCount",
+          "type": "bool",
+          "default": false
+        },
+        "count_over": {
+          "label": "Count over",
+          "type": "enum",
+          "default": "exon",
+          "list": {"exon": "exon"}
+        },
+        "RSEM": {
+          "label": "RSEM",
+          "type": "bool",
+          "default": false
+        },
+        "salmon_align": {
+          "label": "Salmon quantification BAM-based",
+          "type": "bool",
+          "default": false
+        },
+        "salmon_map": {
+          "label": "Salmon quantification fastq-based",
+          "type": "bool",
+          "default": false
+        },
+        "kallisto": {
+          "label": "Kallisto",
+          "type": "bool",
+          "default": false
         }
-      },
-      "keep_not_markDups_bam": {
-        "label": "Keep not_markDups_bam file",
-        "type": "bool",
-        "default": false,
-        "conditions": {
-          "relevance": {
-            "operand": "notEqual",
-            "negation": false,
-            "values": {
-              "mark_duplicates": false,
-              "umi_usage": "umi_concensus"
-            }
-          }
-        }
-      },
-      "keep_no_umi_consensus_bam": {
-        "label": "Keep bam file without UMI consensus",
-        "type": "bool",
-        "default": false,
-        "conditions": {
-          "relevance": {
-            "operand": "equal",
-            "negation": false,
-            "values": {
-              "umi_usage": "umi_concensus"
-            }
-          }
-        }
-      },
-      "umi_consensus_min_support": {
-        "label": "UMI consensus min_support",
-        "type": "int",
-        "default": 1,
-        "conditions": {
-          "relevance": {
-            "operand": "equal",
-            "negation": false,
-            "values": {
-              "umi_usage": "umi_concensus"
-            }
-          }
-        }
-      },
-      "featureCount": {
-        "label": "FeatureCount",
-        "type": "bool",
-        "default": false
-      },
-      "count_over": {
-        "label": "Count over",
-        "type": "enum",
-        "default": "exon",
-        "list": {"exon": "exon"}
-      },
-      "RSEM": {
-        "label": "RSEM",
-        "type": "bool",
-        "default": false
-      },
-      "salmon_align": {
-        "label": "Salmon quantification BAM-based",
-        "type": "bool",
-        "default": false
-      },
-      "salmon_map": {
-        "label": "Salmon quantification fastq-based",
-        "type": "bool",
-        "default": false
-      },
-      "kallisto": {
-        "label": "Kallisto",
-        "type": "bool",
-        "default": false
       }
     }
   }
-}
