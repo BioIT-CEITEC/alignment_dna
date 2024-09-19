@@ -45,7 +45,8 @@
             "GRCm39": "Assembly GRCm39"
           }
         }
-      },
+      }
+    },
       "enumParam1": {
         "label": "Label 2",
         "type": "enum",
