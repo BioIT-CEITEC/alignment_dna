@@ -33,63 +33,63 @@
       "dynamicEnumName": "lib_ROI"
     },
       "organism": {
-      "label": "Organism",
-      "type": "enum",
-      "list": {
-        "Aaa group": {
-          "homo_sapiens": "Homo sapiens (human)",
-          "mus_musculus": "Mus musculus (mouse)"
-        }
-      }
-    },
-    "assembly": {
-      "label": "Assembly",
-      "type": "enum",
-      "list": {
-        "Homo sapiens (human)": {
-          "GRCH37": "GRCH37",
-          "GRCh38": "GRCh38"
-        },
-        "Mus musculus (mouse)": {
-          "GRCm38": "GRCm38",
-          "GRCm39": "GRCm39"
+        "label": "Organism",
+        "type": "enum",
+        "list": {
+          "Organisms": {
+            "homo_sapiens": "Homo sapiens (human)",
+            "mus_musculus": "Mus musculus (mouse)"
+          }
         }
       },
-      "filters": {
-        "group": {
-          "param": "enumParamFilter",
-          "type": "label",
-          "showGroupLabel": true
+      "assembly": {
+        "label": "Assembly",
+        "type": "enum",
+        "list": {
+          "Homo sapiens (human)": {
+            "GRCh37": "GRCh37",
+            "GRCh38": "GRCh38"
+          },
+          "Mus musculus (mouse)": {
+            "GRCm38": "GRCm38",
+            "GRCm39": "GRCm39"
+          }
+        },
+        "filters": {
+          "group": {
+            "param": "enumParamFilter",
+            "type": "label",
+            "showGroupLabel": true
+          }
         }
-      }
-    },
-    "release": {
-      "label": "release",
-      "type": "enum",
-      "list": {
-        "GRCh37": {
-          "r87": "Release 87"
-        },
-        "GRCh38": {
-          "r91": "Release",
-          "r95": "Release 95",
-          "r110": "Release 110",
-          "r111": "Release 111 (latest)"
-        },
-        "GRCm38": {
-          "r95": "Release 95"
-        },
-        "GRCm39": {
-          "r111": "Release 111 (latest)"
-      }
       },
-      "filters": {
-        "group": {
-          "param": "enumParamFilter",
-          "type": "value"
+      "release": {
+        "label": "release",
+        "type": "enum",
+        "list": {
+          "GRCh37": {
+            "r87": "Release 87"
+          },
+          "GRCh38": {
+            "r91": "Release",
+            "r95": "Release 95",
+            "r110": "Release 110",
+            "r111": "Release 111 (latest)"
+          },
+          "GRCm38": {
+            "r95": "Release 95"
+          },
+          "GRCm39": {
+            "r111": "Release 111 (latest)"
+          }
+        },
+        "filters": {
+          "group": {
+            "param": "enumParamFilter",
+            "type": "value"
+          }
         }
-      }
-    },
+      },
       "umi_usage": {
         "label": "UMI usage",
         "type": "enum",
@@ -224,4 +224,3 @@
     }
   }
 }
-
