@@ -46,11 +46,11 @@
         "label": "Assembly",
         "type": "enum",
         "list": {
-          "Homo sapiens (human)": {
+          "homo_sapiens": {
             "GRCh37": "GRCh37",
             "GRCh38": "GRCh38"
           },
-          "Mus musculus (mouse)": {
+          "mus_musculus": {
             "GRCm38": "GRCm38",
             "GRCm39": "GRCm39"
           }
@@ -58,8 +58,7 @@
         "filters": {
           "group": {
             "param": "enumParamFilter",
-            "type": "label",
-            "showGroupLabel": true
+            "type": "value"
           }
         }
       },
