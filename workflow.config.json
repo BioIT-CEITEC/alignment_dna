@@ -32,7 +32,7 @@
       "type": "enum",
       "dynamicEnumName": "lib_ROI"
     },
-  "enumParamFilter": {
+    "enumParamFilter": {
     "label": "Label 1",
     "type": "enum",
     "list": {
