@@ -33,22 +33,21 @@
       "dynamicEnumName": "lib_ROI"
     },
       "organism": {
-      "label": "Organism",
+      "label": "Assembly selection",
       "type": "enum",
       "list": {
-        "Aaa group": {
-          "homo_sapiens": "Homo sapiens (human)",
-          "mus_musculus": "Mus musculus (mouse)"
+        "Homo sapiens (human)": {
+          "GRCh37": "Assembly GRCh37",
+          "GRCh38": "Assembly GRCh38"
         }
       }
     },
     "assembly": {
-      "label": "Assembly",
+      "label": "Release",
       "type": "enum",
       "list": {
-        "Homo sapiens (human)": {
-          "GRCH37": "GRCH37",
-          "GRCh38": "GRCh38"
+        "Assembly GRCh37": {
+          "r87": "Release 87",
         },
         "Mus musculus (mouse)": {
           "GRCm38": "GRCm38",
