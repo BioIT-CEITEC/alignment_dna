@@ -56,7 +56,7 @@
                 },
                 "filters": {
                     "group": {
-                        "param": "enumParamFilter",
+                        "param": "organism",
                         "type": "label",
                         "showGroupLabel": true
                     }
