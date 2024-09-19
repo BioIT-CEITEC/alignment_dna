@@ -32,59 +32,64 @@
       "type": "enum",
       "dynamicEnumName": "lib_ROI"
     },
-      "organism": {
-        "label": "Organism",
+      "enumParamFilter": {
+        "label": "Label 1",
         "type": "enum",
         "list": {
           "Organisms": {
-            "homo_sapiens": "Homo sapiens (human)",
-            "mus_musculus": "Mus musculus (mouse)"
+            "homo_sapiens": "Homo sapiens",
+            "mus_musculus": "Mus musculus"
+          },
+          "Bbb group": {
+            "bbb1": "Bbb 1",
+            "bbb2": "Bbb 2"
           }
         }
       },
-      "assembly": {
-        "label": "Assembly",
+      "enumParam1": {
+        "label": "Label 2",
         "type": "enum",
         "list": {
-          "homo_sapiens": {
+          "Homo sapiens": {
             "GRCh37": "GRCh37",
             "GRCh38": "GRCh38"
           },
-          "mus_musculus": {
-            "GRCm38": "GRCm38",
-            "GRCm39": "GRCm39"
-          }
+          "Bbb 1": {
+            "value2": "Value label 2",
+            "value3": "Value label 3"
+          },
+          "Bbb 2": {
+            "value4": "Value label 4"
+          },
+          "value5": "Value label 5"
         },
         "filters": {
           "group": {
             "param": "enumParamFilter",
-            "type": "value"
+            "type": "label",
+            "showGroupLabel": true
           }
         }
       },
-      "release": {
-        "label": "release",
+      "enumParam2": {
+        "label": "Label 3",
         "type": "enum",
         "list": {
           "GRCh37": {
-            "r87": "Release 87"
-          },
-          "GRCh38": {
-            "r91": "Release",
-            "r95": "Release 95",
-            "r110": "Release 110",
-            "r111": "Release 111 (latest)"
-          },
-          "GRCm38": {
             "r95": "Release 95"
           },
-          "GRCm39": {
-            "r111": "Release 111 (latest)"
-          }
+          "bbb1": {
+            "value2": "Value label 2",
+            "value3": "Value label 3"
+          },
+          "bbb2": {
+            "value4": "Value label 4"
+          },
+          "value5": "Value label 5"
         },
         "filters": {
           "group": {
-            "param": "enumParamFilter",
+            "param": "enumParam1",
             "type": "value"
           }
         }
