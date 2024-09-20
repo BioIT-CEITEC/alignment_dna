@@ -28,17 +28,32 @@
   "gui_params": {
       "primary": {
           "lib_ROI": {
-              "label": "Regions of Interest",
+              "label": "Regions of Interest (dynamic)",
               "type": "enum",
               "dynamicEnumName": "lib_ROI"
           },
+          "organism_name": {
+              "label": "Organism name selection (dynamic)",
+              "type": "enum",
+              "dynamicEnumName": "organism"
+          },
+          "assembly": {
+              "label": "Reference selection (dynamic)",
+              "type": "enum",
+              "dynamicEnumName": "reference"
+          },
+          "release_dyn": {
+              "label": "Release selection (dynamic)",
+              "type": "enum",
+              "dynamicEnumName": "release_test"
+          },
           "reference": {
-              "label": "Reference",
+              "label": "Reference (dynamic-filtering)",
               "type": "enum",
               "dynamicEnumName": "reference"
           },
           "release": {
-              "label": "Release",
+              "label": "Release selection (filtered)",
               "type": "enum",
               "list": {
                   "GRCh37": {
