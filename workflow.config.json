@@ -162,7 +162,7 @@
       },
       "count_over": {
         "type": "constant",
-        "default": "exon",
+        "default": "exon"
       },
       "RSEM": {
         "label": "RSEM",
