@@ -157,15 +157,12 @@
         }
       },
       "featureCount": {
-        "label": "FeatureCount",
-        "type": "bool",
+        "type": "constant",
         "default": false
       },
       "count_over": {
-        "label": "Count over",
-        "type": "enum",
+        "type": "constant",
         "default": "exon",
-        "list": {"exon": "exon"}
       },
       "RSEM": {
         "label": "RSEM",
