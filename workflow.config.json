@@ -32,12 +32,7 @@
               "type": "enum",
               "dynamicEnumName": "lib_ROI"
           },
-          "organism":{
-              "label": "Organism",
-              "type": "enum",
-              "dynamicEnumName": "organism_name"
-          },
-          "assembly": {
+          "reference": {
               "label": "Reference",
               "type": "enum",
               "dynamicEnumName": "reference"
