@@ -32,23 +32,21 @@
               "type": "enum",
               "dynamicEnumName": "lib_ROI"
           },
+          "organism":{
+              "label": "Organism",
+              "type": "enum",
+              "dynamicEnumName": "organism_name"
+          },
           "reference": {
               "label": "Reference",
               "type": "enum",
               "dynamicEnumName": "reference"
           },
-          "organism": {
-              "label": "Assembly selection",
-              "type": "enum",
-              "list": {
-                  "Homo sapiens (human)": {
-                      "GRCh37": "Assembly GRCh37",
-                      "GRCh38": "Assembly GRCh38"
-                  },
-                  "Mus musculus (mouse)": {
-                      "GRCm38": "Assembly GRCm38",
-                      "GRCm39": "Assembly GRCm39"
-                  }
+          "filters": {
+              "group": {
+                "param": "organism",
+                "type": "value",
+                "showGroupLabel": true
               }
           },
           "assembly": {
