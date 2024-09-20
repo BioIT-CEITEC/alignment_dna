@@ -37,19 +37,12 @@
               "type": "enum",
               "dynamicEnumName": "organism_name"
           },
-          "reference": {
+          "assembly": {
               "label": "Reference",
               "type": "enum",
               "dynamicEnumName": "reference"
           },
-          "filters": {
-              "group": {
-                "param": "organism",
-                "type": "value",
-                "showGroupLabel": true
-              }
-          },
-          "assembly": {
+          "release": {
               "label": "Release",
               "type": "enum",
               "list": {
