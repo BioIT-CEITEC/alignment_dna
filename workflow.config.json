@@ -165,23 +165,19 @@
         "default": "exon"
       },
       "RSEM": {
-        "label": "RSEM",
-        "type": "bool",
+        "type": "constant",
         "default": false
       },
       "salmon_align": {
-        "label": "Salmon quantification BAM-based",
-        "type": "bool",
+        "type": "constant",
         "default": false
       },
       "salmon_map": {
-        "label": "Salmon quantification fastq-based",
-        "type": "bool",
+        "type": "constant",
         "default": false
       },
       "kallisto": {
-        "label": "Kallisto",
-        "type": "bool",
+        "type": "constant",
         "default": false
       }
     }
