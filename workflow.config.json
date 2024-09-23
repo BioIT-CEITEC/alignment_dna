@@ -1,60 +1,84 @@
 {
-  "workflow_description": {
-    "name": "alignment_DNA",
-    "version": 2.0,
-    "label": "Alignment DNA",
-    "type": "alignment_dna",
-    "inputs": "*/{sample}*fastq.gz",
-    "outputs": [
-      "mapped/{sample}.bam",
-      "mapped/{sample}.bam.bai",
-      "logs/{sample}/*",
-      "qc_reports/*"
+    "workflow_description": {
+      "name": "alignment_DNA",
+      "version": 2.0,
+      "label": "Alignment DNA",
+      "type": "alignment_dna",
+      "inputs": "*/{sample}*fastq.gz",
+      "outputs": [
+        "mapped/{sample}.bam",
+        "mapped/{sample}.bam.bai",
+        "logs/{sample}/*",
+        "qc_reports/*"
+      ],
+      "report_index": "qc_reports/all_samples/alignment_DNA_multiqc/multiqc.html",
+      "reports":[
+         "qc_reports/*"
+      ]
+    },
+    "general_params": [
+      "entity_name",
+      "sample_name"
     ],
-    "report_index": "qc_reports/all_samples/alignment_DNA_multiqc/multiqc.html",
-    "reports":[
-       "qc_reports/*"
-    ]
-  },
-  "general_params": [
-    "entity_name",
-    "sample_name"
-  ],
-  "requested_params": [
-    "is_paired",
-    "UMI",
-    "trim_adapters"
-  ],
-  "gui_params": {
-    "primary": {
-      "umi_usage": {
-        "label": "UMI usage",
-        "type": "enum",
-        "default": "mark_duplicates",
-        "list": {
-          "no": "Don't use UMI",
-          "mark_duplicates": "Mark duplicates",
-          "umi_concensus": "UMI concensus"
-        },
-        "conditions": {
-          "relevance": {
-            "operand": "equal",
-            "negation": true,
-            "values": {
-              "UMI": "no_umi"
+    "requested_params": [
+      "is_paired",
+      "UMI",
+      "trim_adapters"
+    ],
+    "gui_params": {
+      "primary": {
+        "umi_usage": {
+          "label": "UMI usage",
+          "type": "enum",
+          "default": "mark_duplicates",
+          "list": {
+            "no": "Don't use UMI",
+            "mark_duplicates": "Mark duplicates",
+            "umi_concensus": "UMI concensus"
+          },
+          "conditions": {
+            "relevance": {
+              "operand": "equal",
+              "negation": true,
+              "values": {
+                "UMI": "no_umi"
+              }
             }
           }
-        }
-      },
-      "reference": {
-        "label": "Organism",
+        },
+        "reference": {
+          "label": "Organism",
+          "type": "enum",
+          "dynamicEnumName": "organism"
+        },
+        "assembly": {
+          "label": "Genomic Reference",
+          "type": "enum",
+          "dynamicEnumName": "reference",
+          "filters": {
+            "group": {
+              "param": "reference",
+              "type": "value",
+              "showGroupLabel": false
+            }
+          }
+        },
+        "release": {
+          "label": "Release",
+          "type": "enum",
+          "dynamicEnumName": "release",
+          "filters": {
+            "group": {
+              "param": "assembly",
+              "type": "value",
+              "showGroupLabel": false
+            }
+          }
+        },
+      "lib_ROI": {
+        "label": "Regions of interest",
         "type": "enum",
-        "dynamicEnumName": "organism"
-      },
-      "assembly": {
-        "label": "Genomic Reference",
-        "type": "enum",
-        "dynamicEnumName": "reference",
+        "dynamicEnumName": "lib_ROI",
         "filters": {
           "group": {
             "param": "reference",
@@ -62,124 +86,112 @@
             "showGroupLabel": false
           }
         }
-      },
-      "release": {
-        "label": "Release",
-        "type": "enum",
-        "dynamicEnumName": "release",
-        "filters": {
-          "group": {
-            "param": "assembly",
-            "type": "value",
-            "showGroupLabel": false
-          }
-        }
       }
     },
-    "detailed": {
-      "mark_duplicates": {
-        "label": "Mark duplicates",
-        "type": "bool",
-        "default": true,
-        "conditions": {
-          "relevance": {
-            "operand": "notEqual",
-            "negation": false,
-            "values": {
-              "umi_usage": "umi_concensus"
-            }
-          },
-          "value": {
-            "umi_usage": {
-              "no": true,
-              "mark_duplicates": true,
-              "umi_concensus": false
-            }
-          }
-        }
-      },
-      "remove_duplicates": {
-        "label": "Remove duplicates",
-        "type": "bool",
-        "default": true,
-        "conditions": {
-          "relevance": {
-            "operand": "notEqual",
-            "negation": false,
-            "values": {
-              "mark_duplicates": false,
-              "umi_usage": "umi_concensus"
+      "detailed": {
+        "mark_duplicates": {
+          "label": "Mark duplicates",
+          "type": "bool",
+          "default": true,
+          "conditions": {
+            "relevance": {
+              "operand": "notEqual",
+              "negation": false,
+              "values": {
+                "umi_usage": "umi_concensus"
+              }
+            },
+            "value": {
+              "umi_usage": {
+                "no": true,
+                "mark_duplicates": true,
+                "umi_concensus": false
+              }
             }
           }
-        }
-      },
-      "keep_not_markDups_bam": {
-        "label": "Keep not_markDups_bam file",
-        "type": "bool",
-        "default": false,
-        "conditions": {
-          "relevance": {
-            "operand": "notEqual",
-            "negation": false,
-            "values": {
-              "mark_duplicates": false,
-              "umi_usage": "umi_concensus"
+        },
+        "remove_duplicates": {
+          "label": "Remove duplicates",
+          "type": "bool",
+          "default": true,
+          "conditions": {
+            "relevance": {
+              "operand": "notEqual",
+              "negation": false,
+              "values": {
+                "mark_duplicates": false,
+                "umi_usage": "umi_concensus"
+              }
             }
           }
-        }
-      },
-      "keep_no_umi_consensus_bam": {
-        "label": "Keep bam file without UMI consensus",
-        "type": "bool",
-        "default": false,
-        "conditions": {
-          "relevance": {
-            "operand": "equal",
-            "negation": false,
-            "values": {
-              "umi_usage": "umi_concensus"
+        },
+        "keep_not_markDups_bam": {
+          "label": "Keep not_markDups_bam file",
+          "type": "bool",
+          "default": false,
+          "conditions": {
+            "relevance": {
+              "operand": "notEqual",
+              "negation": false,
+              "values": {
+                "mark_duplicates": false,
+                "umi_usage": "umi_concensus"
+              }
             }
           }
-        }
-      },
-      "umi_consensus_min_support": {
-        "label": "UMI consensus min_support",
-        "type": "int",
-        "default": 1,
-        "conditions": {
-          "relevance": {
-            "operand": "equal",
-            "negation": false,
-            "values": {
-              "umi_usage": "umi_concensus"
+        },
+        "keep_no_umi_consensus_bam": {
+          "label": "Keep bam file without UMI consensus",
+          "type": "bool",
+          "default": false,
+          "conditions": {
+            "relevance": {
+              "operand": "equal",
+              "negation": false,
+              "values": {
+                "umi_usage": "umi_concensus"
+              }
             }
           }
+        },
+        "umi_consensus_min_support": {
+          "label": "UMI consensus min_support",
+          "type": "int",
+          "default": 1,
+          "conditions": {
+            "relevance": {
+              "operand": "equal",
+              "negation": false,
+              "values": {
+                "umi_usage": "umi_concensus"
+              }
+            }
+          }
+        },
+        "featureCount": {
+          "type": "constant",
+          "default": false
+        },
+        "count_over": {
+          "type": "constant",
+          "default": "exon"
+        },
+        "RSEM": {
+          "type": "constant",
+          "default": false
+        },
+        "salmon_align": {
+          "type": "constant",
+          "default": false
+        },
+        "salmon_map": {
+          "type": "constant",
+          "default": false
+        },
+        "kallisto": {
+          "type": "constant",
+          "default": false
         }
-      },
-      "featureCount": {
-        "type": "constant",
-        "default": false
-      },
-      "count_over": {
-        "type": "constant",
-        "default": "exon"
-      },
-      "RSEM": {
-        "type": "constant",
-        "default": false
-      },
-      "salmon_align": {
-        "type": "constant",
-        "default": false
-      },
-      "salmon_map": {
-        "type": "constant",
-        "default": false
-      },
-      "kallisto": {
-        "type": "constant",
-        "default": false
       }
     }
   }
-}
