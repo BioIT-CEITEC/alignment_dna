@@ -81,7 +81,7 @@
         "dynamicEnumName": "lib_ROI",
         "filters": {
           "group": {
-            "param": "reference",
+            "param": "assembly",
             "type": "value",
             "showGroupLabel": false
           }
