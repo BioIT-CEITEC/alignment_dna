@@ -51,10 +51,10 @@
         "type": "enum",
         "dynamicEnumName": "organism"
       },
-      "reference": {
-        "label": "Genomic Reference",
+      "assembly": {
+        "label": "Genomic Reference Assembly",
         "type": "enum",
-        "dynamicEnumName": "reference",
+        "dynamicEnumName": "assembly",
         "filters": {
           "group": {
             "param": "organism",
@@ -69,7 +69,7 @@
         "dynamicEnumName": "lib_ROI",
         "filters": {
           "group": {
-            "param": "reference",
+            "param": "assembly",
             "type": "value",
             "showGroupLabel": false
           }
