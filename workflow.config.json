@@ -179,6 +179,10 @@
       "kallisto": {
         "type": "constant",
         "default": false
+      },
+      "release": {
+        "type": "constant",
+        "default": "UNK"
       }
     }
   }
