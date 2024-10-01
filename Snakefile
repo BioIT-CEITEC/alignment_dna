@@ -45,7 +45,7 @@ include: "rules/alignment_DNA.smk"
 
 ##### BioRoot utilities - prepare reference #####
 module PR:
-    snakefile: gitlab("bioroots/bioroots_utilities", path="prepare_reference.smk",branch="master")
+    snakefile: github("BioIT-CEITEC/bioroots_utilities", path="prepare_reference.smk",branch="master")
     config: config
 
 use rule * from PR as other_*
