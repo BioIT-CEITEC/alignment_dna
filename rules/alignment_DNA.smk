@@ -1,26 +1,6 @@
-
-# def trim_adapters_input(wildcards):
-#     if config["trim_adapters"]:
-#         if read_pair_tags == [""]:
-#             return "raw_fastq/{sample}.fastq.gz"
-#         else:
-#             return ["raw_fastq/{sample}_R1.fastq.gz","raw_fastq/{sample}_R2.fastq.gz"]
-#
-# rule trim_adapters:
-#     input:  trim_adapters_input,
-#     output: fastq = expand("cleaned_fastq/{{sample}}{read_pair_tag}.fastq.gz",read_pair_tag = read_pair_tags),
-#             trim_stats = expand("qc_reports/{{sample}}/trim_galore/trim_stats{read_pair_tag}.log",read_pair_tag=read_pair_tags)
-#     log:    "logs/{sample}/trim_adapters.log"
-#     params: paired = config["is_paired"],
-#             outdir = "cleaned_fastq",
-#     threads: 8
-#     conda: "../wrappers/trim_adapters/env.yaml"
-#     script: "../wrappers/trim_adapters/script.py"
-
-
 def alignment_DNA_input(wildcards):
     if config["trim_adapters"]:
-        preprocessed = "cleaned_fastq"
+        preprocessed = "processed_fastq"
     else:
         preprocessed = "raw_fastq"
     if read_pair_tags == [""]:
@@ -28,10 +8,9 @@ def alignment_DNA_input(wildcards):
     else:
         return [os.path.join(preprocessed,"{sample}_R1.fastq.gz"),os.path.join(preprocessed,"{sample}_R2.fastq.gz")]
 
-
 rule alignment_DNA:
     input:  fastqs = alignment_DNA_input,
-            ref = expand("{ref_dir}/index/BWA/{ref}.bwt",ref_dir=reference_directory,ref = config["reference"])[0],
+            ref = config["organism_bwa"],  # defined in utilities
     output: bam = "mapped/{sample}.not_markDups.bam",
             bai = "mapped/{sample}.not_markDups.bam.bai"
     log:    "logs/{sample}/alignment_DNA.log"
@@ -39,7 +18,6 @@ rule alignment_DNA:
     threads: 40
     conda: "../wrappers/alignment_DNA/env.yaml"
     script: "../wrappers/alignment_DNA/script.py"
-
 
 rule mark_duplicates:
     input:  bam = "mapped/{sample}.not_markDups.bam",
@@ -57,13 +35,12 @@ rule mark_duplicates:
     conda: "../wrappers/mark_duplicates/env.yaml"
     script: "../wrappers/mark_duplicates/script.py"
 
-
 rule umi_concensus:
     input:  bam = "mapped/{sample}.not_markDups.bam",
             bai = "mapped/{sample}.not_markDups.bam.bai",
-            ref = expand("{ref_dir}/index/BWA/{ref}.bwt",ref_dir=reference_directory,ref=config["reference"])[0],
-            lib_ROI = expand("{ref_dir}/intervals/{lib_ROI}/{lib_ROI}.bed",ref_dir=reference_directory,lib_ROI=config["lib_ROI"])[0],
-            fa = expand("{ref_dir}/seq/{ref}.fa",ref_dir=reference_directory,ref=config["reference"])[0],
+            ref = config["organism_bwa"],  # defined in utilities
+            lib_ROI = config["organism_dna_panel"],  # defined in utilities
+            fa = config["organism_fasta"],  # defined in utilities
     output: bam = "mapped/{sample}.concensus.bam",
             html = "qc_reports/{sample}/umi_concensus/umi_concensus.html",
             json = "qc_reports/{sample}/umi_concensus/umi_concensus.json",
@@ -73,7 +50,6 @@ rule umi_concensus:
             tmpd = GLOBAL_TMPD_PATH
     conda: "../wrappers/umi_concensus/env.yaml"
     script: "../wrappers/umi_concensus/script.py"
-
 
 def index_and_stats_input(wildcards):
     if not config["umi_usage"] == "umi_concensus":
@@ -92,7 +68,6 @@ rule index_and_stats:
     conda: "../wrappers/index_and_stats/env.yaml"
     script: "../wrappers/index_and_stats/script.py"
 
-
 rule alignment_DNA_multiqc:
     input:  bam = expand("mapped/{sample}.bam",sample = sample_tab.sample_name),
             idxstats = expand("qc_reports/{sample}/index_and_stats/{sample}.idxstats.tsv",sample = sample_tab.sample_name),
@@ -102,4 +77,3 @@ rule alignment_DNA_multiqc:
             umi_usage = config["umi_usage"]
     conda: "../wrappers/alignment_DNA_multiqc/env.yaml"
     script: "../wrappers/alignment_DNA_multiqc/script.py"
-

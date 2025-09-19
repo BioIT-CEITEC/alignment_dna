@@ -1,7 +1,7 @@
 {
   "workflow_description": {
     "name": "alignment_DNA",
-    "version": 1.0,
+    "version": 2.0,
     "label": "Alignment DNA",
     "type": "alignment_dna",
     "inputs": "*/{sample}*fastq.gz",
@@ -46,26 +46,34 @@
           }
         }
       },
+      "organism": {
+        "label": "Organism",
+        "type": "enum",
+        "dynamicEnumName": "organism"
+      },
+      "assembly": {
+        "label": "Genomic Reference Assembly",
+        "type": "enum",
+        "dynamicEnumName": "assembly",
+        "filters": {
+          "group": {
+            "param": "organism",
+            "type": "value",
+            "showGroupLabel": false
+          }
+        }
+      },
       "lib_ROI": {
         "label": "Regions of interest",
         "type": "enum",
-        "default": "wgs",
-        "list": ##INCLUDE:reference_info/lib_ROI.json##
-      },
-      "reference": {
-        "label": "Genomic Reference",
-        "type": "enum",
-        "default": ##INCLUDE:reference_info/default_reference.json##,
-        "conditions": {
-          "relevance": {
-            "operand": "equal",
-            "negation": false,
-            "values": {
-              "lib_ROI": "wgs"
-            }
+        "dynamicEnumName": "lib_ROI",
+        "filters": {
+          "group": {
+            "param": "assembly",
+            "type": "value",
+            "showGroupLabel": false
           }
-        },
-        "list": ##INCLUDE:reference_info/reference2.json##
+        }
       }
     },
     "detailed": {
@@ -149,35 +157,32 @@
         }
       },
       "featureCount": {
-        "label": "FeatureCount",
-        "type": "bool",
+        "type": "constant",
         "default": false
       },
       "count_over": {
-        "label": "Count over",
-        "type": "enum",
-        "default": "exon",
-        "list": {"exon": "exon"}
+        "type": "constant",
+        "default": "exon"
       },
       "RSEM": {
-        "label": "RSEM",
-        "type": "bool",
+        "type": "constant",
         "default": false
       },
       "salmon_align": {
-        "label": "Salmon quantification BAM-based",
-        "type": "bool",
+        "type": "constant",
         "default": false
       },
       "salmon_map": {
-        "label": "Salmon quantification fastq-based",
-        "type": "bool",
+        "type": "constant",
         "default": false
       },
       "kallisto": {
-        "label": "Kallisto",
-        "type": "bool",
+        "type": "constant",
         "default": false
+      },
+      "release": {
+        "type": "constant",
+        "default": "UNK_UNK"
       }
     }
   }
