@@ -24,7 +24,7 @@ rule mark_duplicates:
             bai = "mapped/{sample}.not_markDups.bam.bai",
     output: bam = "mapped/{sample}.markDups.bam",
     log:    "logs/{sample}/mark_duplicates.log"
-    resources: mem=10
+    resources: mem=50
     params: mark_duplicates=config["mark_duplicates"],
             rmDup=config["remove_duplicates"],
             UMI=config["UMI"],
