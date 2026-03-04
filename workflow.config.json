@@ -4,6 +4,10 @@
     "version": 2.0,
     "label": "Alignment DNA",
     "type": "alignment_dna",
+    "run_parameters": {
+      "cpu": 35,
+      "memory": 125
+    },
     "inputs": "*/{sample}*fastq.gz",
     "outputs": [
       "mapped/{sample}.bam",
