@@ -13,7 +13,8 @@
     ],
     "report_index": "qc_reports/all_samples/alignment_DNA_multiqc/multiqc.html",
     "reports":[
-       "qc_reports/*"
+       "qc_reports/*",
+       "logs/*"
     ]
   },
   "general_params": [
