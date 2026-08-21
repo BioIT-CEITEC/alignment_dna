@@ -184,6 +184,18 @@
       "release": {
         "type": "constant",
         "default": "UNK_UNK"
+      },
+      "species_name": {
+        "type": "constant",
+        "default": "UNK_UNK"
+      },
+      "species": {
+        "type": "constant",
+        "default": "UNK_UNK"
+      },
+      "ref_KEGG": {
+        "type": "constant",
+        "default": "UNK_UNK"
       }
     }
   }
